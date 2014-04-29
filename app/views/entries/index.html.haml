@@ -1,0 +1,12 @@
+%h1 All entries
+
+- @entries.each do |entry|
+  .entry
+    .content
+      Body
+      = entry.body
+    .metadata
+      Tags:
+      = entry.tags
+      Archived:
+      = entry.archived?

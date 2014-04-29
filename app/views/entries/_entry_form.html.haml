@@ -1,0 +1,6 @@
+= form_tag create_entry_path, :method => :post do
+  = label_tag 'entry[body]', 'Body'
+  = text_field_tag 'entry[body]', @entry ? @entry.body : nil, :placeholder => 'Enter Notation text body'
+  = label_tag 'entry[tags]', 'Tags'
+  = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, :placeholder => 'Enter Notation tags', :disabled => true
+  = submit_tag 'Go'
