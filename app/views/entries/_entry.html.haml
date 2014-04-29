@@ -1,9 +1,8 @@
 .entry
-  .content
-    Body:
-    = @entry_to_display.body
+  .content.markdown
+    = @display_entry.markdown_preview
   .metadata
     Tags:
-    = @entry_to_display.tags
+    = @display_entry.tags
     Archived:
-    = @entry_to_display.archived?
+    = @display_entry.archived?

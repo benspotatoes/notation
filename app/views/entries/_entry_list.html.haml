@@ -1,0 +1,4 @@
+.entry_list
+  - @entries.each do |entry|
+    .entry
+      = link_to entry.title, show_entry_path(entry.id)

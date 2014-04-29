@@ -12,5 +12,6 @@
  *
  *= require_self
  *= require reset
+ *= require markdown
  *= require main
  */

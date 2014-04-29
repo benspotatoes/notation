@@ -1,6 +1,7 @@
-Entry
+.sidebar
+  = render partial: 'entry_list'
 
-- @entry_to_display = @entry
-= render partial: 'entry'
-
-= link_to 'Edit', edit_entry_path(@entry.id)
+.main_content
+  = render partial: 'shared/flash'
+  = render partial: 'entry_header'
+  = render partial: 'entry'

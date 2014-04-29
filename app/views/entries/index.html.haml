@@ -1,5 +1,5 @@
-All entries
+.sidebar
+  = render partial: 'entry_list'
 
-- @entries.each do |entry|
-  - @entry_to_display = entry
-  = render partial: 'entry'
+.main_content
+  = render partial: 'shared/flash'

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     get ':id', action: 'show', as: 'show_entry'
     get ':id/edit', action: 'edit', as: 'edit_entry'
     put ':id', action: 'update', as: 'update_entry'
-    delete ':id', action: 'destroy', as: 'destroy_entry'
+    get ':id/archive', action: 'archive', as: 'archive_entry'
   end
 
   devise_for :users

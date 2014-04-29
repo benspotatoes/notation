@@ -1,5 +1,7 @@
-= form_tag create_entry_path, :method => :post do
-  = label_tag 'entry[body]', 'Body'
+= form_tag @entry_form_path, method: @entry_form_request do
+  = label_tag 'entry[title]', 'Task'
+  = text_field_tag 'entry[title]', @entry ? @entry.title : nil, :placeholder => 'Enter Notation title'
+  = label_tag 'entry[body]', 'Description'
   = text_area_tag 'entry[body]', @entry ? @entry.body : nil, :placeholder => 'Enter Notation text body'
   = label_tag 'entry[tags]', 'Tags'
   = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, :placeholder => 'Enter Notation tags', :disabled => true
