@@ -1,3 +1,6 @@
 %h1 Entry
 
-= render partial: 'entry_form'
+- @entry_to_display = @entry
+= render partial: 'entry'
+
+= link_to 'Edit', edit_entry_path(@entry.id)
