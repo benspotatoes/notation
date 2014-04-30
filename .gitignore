@@ -30,3 +30,6 @@ config/secrets.yml
 
 # OSX Stuff
 .DS_Store
+
+# AWS ELB
+.elasticbeanstalk/
