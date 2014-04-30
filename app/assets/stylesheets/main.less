@@ -1,17 +1,22 @@
 body {
-  // padding: 10px;
   min-width: 900px;
   max-width: 1900px;
 
+  // Inherited from Markdown.less
   font-family: Helvetica, arial, sans-serif;
-  font-size: 14px;
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+textarea, input {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 15px;
   line-height: 1.6;
 }
 
 .flash {
   z-index: 1;
   text-align: center;
-  // margin-left: @entry_list_width + 25px;
   min-width: @content_min_width;
   max-width: @content_max_width;
 }
@@ -36,9 +41,31 @@ body {
   opacity: 0.7;
 }
 
+.submit {
+  padding: 10px 50px;
+  background-color: #F2BC0A;
+  color: white;
+  border-radius: 20px;
+  box-shadow: none;
+  border: 0;
+}
+
 .sidebar {
   display: block;
   float: left;
+}
+
+.entry_form_section {
+  margin-bottom: 10px;
+}
+
+.form_label {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.form_field {
+  display: inline-block;
 }
 
 @entry_list_width: 200px;
@@ -49,21 +76,21 @@ body {
   top: 0;
   bottom: 0;
   width: @entry_list_width;
-  margin: 10px 0;
+  margin: 10px 10px;
+
+  a, a:visited {
+    color: #F2BC0A
+  }
+
+  a:hover {
+    color: black;
+  }
 
   .entry {
     border: 1px solid #dddddd;
     margin: 1px auto;
     min-height: 50px;
     overflow: hidden;
-
-    a, a:visited {
-      color: #F2BC0A
-    }
-
-    a:hover {
-      color: black;
-    }
   }
 }
 
@@ -86,6 +113,10 @@ body {
 
     a, a:visited {
       color: #F2BC0A
+    }
+
+    a:hover {
+      color: black;
     }
   }
 

@@ -4,9 +4,6 @@ class EntriesController < ApplicationController
   before_action :load_entry, only: [:show, :edit, :update, :archive]
 
   def index
-  end
-
-  def new
     @entry_form_path = create_entry_path
     @entry_form_request = :post
   end
@@ -19,7 +16,7 @@ class EntriesController < ApplicationController
       redirect_to show_entry_path(@entry.id)
     else
       flash[:error] = 'Error saving entry.'
-      redirect_to new_entry_path
+      redirect_to all_entries_path
     end
   end
 

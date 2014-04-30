@@ -1,8 +1,11 @@
 = form_tag @entry_form_path, method: @entry_form_request do
-  = label_tag 'entry[title]', 'Task'
-  = text_field_tag 'entry[title]', @entry ? @entry.title : nil, :placeholder => 'Enter Notation title'
-  = label_tag 'entry[body]', 'Description'
-  = text_area_tag 'entry[body]', @entry ? @entry.body : nil, :placeholder => 'Enter Notation text body'
-  = label_tag 'entry[tags]', 'Tags'
-  = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, :placeholder => 'Enter Notation tags', :disabled => true
-  = submit_tag 'Go'
+  .entry_form_section
+    .form_field
+      = text_field_tag 'entry[title]', @entry ? @entry.title : nil, placeholder: 'Entry title', size: 80
+  .entry_form_section
+    .form_field
+      = text_area_tag 'entry[body]', @entry ? @entry.body : nil, cols: 80, rows: 20
+  .entry_form_section
+    .form_field
+      = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, placeholder: 'Currently disabled', disabled: true, size: 80
+  = submit_tag 'Save', class: 'submit'

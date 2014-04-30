@@ -1,4 +1,10 @@
 .entry_list
+  Current entries
   - @entries.each do |entry|
     .entry
-      = link_to entry.title, show_entry_path(entry.id)
+      .entry_title
+        = link_to entry.title, show_entry_path(entry.id)
+      .entry_tags
+        = entry.tags
+  .nav
+    = link_to 'Sign Out', destroy_user_session_path
