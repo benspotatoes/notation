@@ -1,8 +1,7 @@
 .entry
   .content.markdown
     = @display_entry.markdown_preview
-  .metadata
-    Tags:
-    = @display_entry.tags
-    Archived:
-    = @display_entry.archived?
+  - if @display_entry.tags
+    .metadata
+      Tags:
+      = @display_entry.tags

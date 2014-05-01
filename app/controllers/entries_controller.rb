@@ -25,6 +25,7 @@ class EntriesController < ApplicationController
   end
 
   def edit
+    @display_entry = @entry
     @entry_form_path = update_entry_path
     @entry_form_request = :put
   end

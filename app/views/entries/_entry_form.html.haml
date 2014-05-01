@@ -1,11 +1,11 @@
 = form_tag @entry_form_path, method: @entry_form_request do
   .entry_form_section
     .form_field
-      = text_field_tag 'entry[title]', @entry ? @entry.title : nil, placeholder: 'Entry title', size: 80
+      = text_field_tag 'entry[title]', @entry ? @entry.title : nil, placeholder: 'Entry title', size: 82
   .entry_form_section
     .form_field
       = text_area_tag 'entry[body]', @entry ? @entry.body : nil, cols: 80, rows: 20
   .entry_form_section
     .form_field
-      = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, placeholder: 'Currently disabled', disabled: true, size: 80
+      = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, placeholder: 'Tags currently disabled', disabled: true, size: 82
   = submit_tag 'Save', class: 'submit'
