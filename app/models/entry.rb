@@ -21,7 +21,7 @@ class Entry < ActiveRecord::Base
     if title.length < TRUNCATED_LIST_TITLE_LENGTH
       title
     else
-      title[0..TRUNCATED_LIST_TITLE_LENGTH-3] + '...'
+      title[0..TRUNCATED_LIST_TITLE_LENGTH-3].strip + '...'
     end
   end
 
@@ -29,7 +29,7 @@ class Entry < ActiveRecord::Base
     if title.length < TRUNCATED_DISP_TITLE_LENGTH
       title
     else
-      title[0..TRUNCATED_DISP_TITLE_LENGTH-3] + '...'
+      title[0..TRUNCATED_DISP_TITLE_LENGTH-3].strip + '...'
     end
   end
 end
