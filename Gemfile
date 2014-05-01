@@ -16,6 +16,7 @@ gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
 
 group :production do
+  gem 'mysql2', '~> 0.3.15'
   gem 'unicorn', '~> 4.8.2'
 end
 
