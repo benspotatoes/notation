@@ -14,6 +14,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'turbolinks'
 gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
+gem 'newrelic_rpm' # New Relic reporting
 
 group :production do
   gem 'mysql2', '~> 0.3.15'
