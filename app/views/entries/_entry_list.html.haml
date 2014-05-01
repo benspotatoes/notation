@@ -3,7 +3,7 @@
   - @entries.each do |entry|
     .entry_item
       .entry_title
-        = link_to entry.title, show_entry_path(entry.id)
+        = link_to entry.list_title, show_entry_path(entry.id)
       .entry_tags
         = entry.tags
   .nav
