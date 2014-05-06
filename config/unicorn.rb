@@ -1,4 +1,4 @@
-working_directory '/home/ec2-user/notation'
+working_directory '/var/www/notation'
 
 pid '/var/www/pids/unicorn.pid'
 
