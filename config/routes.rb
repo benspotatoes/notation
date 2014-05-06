@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root 'pages#root'
 
   get 'entries', controller: 'entries', action: 'index', as: 'all_entries'
+  get 'archived_entries', controller: 'entries', action: 'archived_entries', as: 'archived_entries'
   scope 'entry', controller: 'entries' do
     post '/create', action: 'create', as: 'create_entry'
     get ':id', action: 'show', as: 'show_entry'

@@ -6,6 +6,10 @@ class EntriesController < ApplicationController
   def index
     @entry_form_path = create_entry_path
     @entry_form_request = :post
+
+    if session.delete(:visible_entries)
+      load_all_entries
+    end
   end
 
   def create
@@ -49,6 +53,12 @@ class EntriesController < ApplicationController
     end
   end
 
+  def archived_entries
+    session[:visible_entries] = 'archived'
+    load_all_entries
+    render 'index'
+  end
+
   private
     def load_entry
       @entry = Entry.find_by_id(params[:id])
@@ -60,7 +70,11 @@ class EntriesController < ApplicationController
     end
 
     def load_all_entries
-      @entries = current_user.entries.where.not(archived: true)
+      if session[:visible_entries] == 'archived'
+        @entries = current_user.entries.where(archived: true)
+      else
+        @entries = current_user.entries.where.not(archived: true)
+      end
     end
 
     def entry_params

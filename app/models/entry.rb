@@ -22,7 +22,7 @@ class Entry < ActiveRecord::Base
 
   def set_title
     if title.nil? || title.empty?
-      num_user_entries = Entry.where(:user_id => user_id).count
+      num_user_entries = Entry.where(user_id: user_id).count
       self.title = ENTRY_TITLE_TEMPLATE + "#{num_user_entries + 1}"
     end
   end
