@@ -48,12 +48,18 @@ textarea, input {
   padding: 10px 50px;
   background-color: #F2BC0A;
   color: white;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: none;
   border: 0;
-  appearance: none;
+  appearance: button;
   -moz-appearance: none;
   -webkit-appearance: none;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.submit:hover {
+  opacity: 1;
 }
 
 .sidebar {
@@ -156,7 +162,6 @@ textarea, input {
 
 .splash {
   .hero {
-    border: 1px solid black;
     margin: 10px;
     text-align: center;
   }
