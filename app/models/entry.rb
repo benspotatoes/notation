@@ -2,11 +2,23 @@ class Entry < ActiveRecord::Base
   belongs_to :user
 
   before_save :set_title
+  before_save :set_entry_id
 
+  ENTRY_ID_LENGTH = 5
   TRUNCATED_BODY_LENGTH = 100
   TRUNCATED_LIST_TITLE_LENGTH = 10
   TRUNCATED_DISP_TITLE_LENGTH = 25
   ENTRY_TITLE_TEMPLATE = 'Note # '
+
+  def set_entry_id
+    if entry_id.nil?
+      self.entry_id = SecureRandom.hex(ENTRY_ID_LENGTH)
+    end
+  end
+
+  def public_id
+    entry_id
+  end
 
   def markdown_preview
     RENDERER.render(body).html_safe

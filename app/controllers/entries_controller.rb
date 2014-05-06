@@ -61,7 +61,7 @@ class EntriesController < ApplicationController
 
   private
     def load_entry
-      @entry = Entry.find_by_id(params[:id])
+      @entry = Entry.find_by(entry_id: params[:id], user_id: current_user.id)
       if @entry.nil? || (@entry.user != current_user)
         flash[:error] = 'You do not have permission to view that entry.'
         redirect_to all_entries_path
