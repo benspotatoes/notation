@@ -1,16 +1,23 @@
-%h2 Sign in
-= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-  %div
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  %div
-    = f.label :password
-    %br/
-    = f.password_field :password, autocomplete: "off"
-  - if devise_mapping.rememberable?
-    %div
-      = f.check_box :remember_me
-      = f.label :remember_me
-  %div= f.submit "Sign in"
-= render "devise/shared/links"
+.splash
+  .hero
+    .head
+      Notation @ Ben's Potatoes
+    .body
+      .devise_form
+        = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+          .entry_form_section
+            .form_field
+              = f.email_field :email, autofocus: true, placeholder: 'Email'
+          .entry_form_section
+            .form_field
+              = f.password_field :password, autocomplete: "off", placeholder: 'Password'
+          - if devise_mapping.rememberable?
+            .entry_form_section
+              .form_field
+                = f.check_box :remember_me, class: 'remember_box'
+                = f.submit "Sign in", class: 'submit'
+          - else
+            = f.submit "Sign in", class: 'submit'
+        = link_to 'Register', new_registration_path(resource_name), class: 'reg_btn devise_btn'
+        = link_to 'Password', new_password_path(resource_name), class: 'pw_btn devise_btn'
+        = link_to 'Confirmation', new_confirmation_path(resource_name), class: 'conf_btn devise_btn'
