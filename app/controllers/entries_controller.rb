@@ -17,7 +17,7 @@ class EntriesController < ApplicationController
     @entry.user = current_user
     if @entry.save
       flash[:success] = 'Entry successfully saved.'
-      redirect_to show_entry_path(@entry.id)
+      redirect_to show_entry_path(@entry.public_id)
     else
       flash[:error] = 'Error saving entry.'
       redirect_to all_entries_path
@@ -40,7 +40,7 @@ class EntriesController < ApplicationController
     else
       flash[:error] = 'Error updating entry.'
     end
-    redirect_to show_entry_path(@entry.id)
+    redirect_to show_entry_path(@entry.public_id)
   end
 
   def archive
@@ -49,7 +49,7 @@ class EntriesController < ApplicationController
       redirect_to all_entries_path
     else
       flash[:error] = 'Error archiving entry.'
-      redirect_to show_entry_path(@entry.id)
+      redirect_to show_entry_path(@entry.public_id)
     end
   end
 
