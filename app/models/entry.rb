@@ -48,10 +48,16 @@ class Entry < ActiveRecord::Base
   end
 
   def disp_title
-    if title.length < TRUNCATED_DISP_TITLE_LENGTH
-      title
+    to_display =
+      if title.length < TRUNCATED_DISP_TITLE_LENGTH
+        title
+      else
+        title[0..TRUNCATED_DISP_TITLE_LENGTH-3].strip + '...'
+      end
+    if archived?
+      "(#{to_display})"
     else
-      title[0..TRUNCATED_DISP_TITLE_LENGTH-3].strip + '...'
+      to_display
     end
   end
 end
