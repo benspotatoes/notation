@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   root 'pages#root'
 
-  get 'entries', controller: 'entries', action: 'index', as: 'all_entries'
-  get 'archived_entries', controller: 'entries', action: 'archived_entries', as: 'archived_entries'
+  scope 'entries', controller: 'entries' do
+    get '/', action: 'index', as: 'all_entries'
+    get 'archived', action: 'archived_entries', as: 'archived_entries'
+    get 'by_tag/:tag', action: 'by_tag', as: 'entries_by_tag'
+  end
+
   scope 'entry', controller: 'entries' do
     post '/create', action: 'create', as: 'create_entry'
     get ':id', action: 'show', as: 'show_entry'

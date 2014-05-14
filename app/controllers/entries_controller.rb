@@ -7,9 +7,22 @@ class EntriesController < ApplicationController
     @entry_form_path = create_entry_path
     @entry_form_request = :post
 
+    session[:entry_list_title] = 'Active entries'
+    session.delete(:by_tag)
+
     if session.delete(:visible_entries)
+      # Reload all entries to get 'active' ones
       load_all_entries
     end
+  end
+
+  def by_tag
+    tag = params[:tag]
+    session[:by_tag] = tag
+    session[:entry_list_title] = "Tag: '#{tag}'"
+
+    filter_entries_by_tag
+    render 'index'
   end
 
   def create
@@ -26,6 +39,7 @@ class EntriesController < ApplicationController
 
   def show
     @display_entry = @entry
+    filter_entries_by_tag
   end
 
   def edit
@@ -54,7 +68,9 @@ class EntriesController < ApplicationController
   end
 
   def archived_entries
+    session[:entry_list_title] = 'Archived entries'
     session[:visible_entries] = 'archived'
+    session.delete(:by_tag)
     load_all_entries
     render 'index'
   end
@@ -71,13 +87,19 @@ class EntriesController < ApplicationController
 
     def load_all_entries
       if session[:visible_entries] == 'archived'
-        @entries = current_user.entries.where(archived: true)
+        @entries = current_user.entries.where(archived: true).order(updated_at: :desc)
       else
-        @entries = current_user.entries.where.not(archived: true)
+        @entries = current_user.entries.where.not(archived: true).order(updated_at: :desc)
       end
     end
 
     def entry_params
       params.require(:entry).permit(:title, :body, :tags)
+    end
+
+    def filter_entries_by_tag
+      if tag = session[:by_tag]
+        @entries = @entries.select { |entry| entry.tag_match?(tag) }
+      end
     end
 end

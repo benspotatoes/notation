@@ -3,6 +3,7 @@ class Entry < ActiveRecord::Base
 
   before_save :set_title
   before_save :set_entry_id
+  before_save :sanitize_tags
 
   ENTRY_ID_LENGTH = 5
   TRUNCATED_BODY_LENGTH = 100
@@ -59,5 +60,26 @@ class Entry < ActiveRecord::Base
     else
       to_display
     end
+  end
+
+  def sanitize_tags
+    self.tags = tags.split(',').map(&:strip).join(', ') if tags
+  end
+
+  def each_tag
+    return tags unless tags.try(:split) && block_given?
+    tags.split(', ').each_with_index do |tag, index|
+      yield tag.strip, index
+    end
+  end
+
+  def tag_count
+    return 0 unless tags.try(:split)
+    tags.split(', ').count
+  end
+
+  def tag_match?(tag = '')
+    return false if tags.nil?
+    tags.include?(tag)
   end
 end

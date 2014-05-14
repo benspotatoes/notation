@@ -1,11 +1,11 @@
 .entry_list
-  Current entries
+  = session[:entry_list_title]
   - @entries.each do |entry|
     .entry_item
       .entry_title
         = link_to entry.list_title, show_entry_path(entry.public_id)
       .entry_tags
-        = entry.tags
+        = '' # entry.tags
   .nav
     - if session[:visible_entries] == 'archived'
       = link_to 'Active', all_entries_path

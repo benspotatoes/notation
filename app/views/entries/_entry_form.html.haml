@@ -7,5 +7,5 @@
       = text_area_tag 'entry[body]', @entry ? @entry.body : nil, cols: 80, rows: 20
   .entry_form_section
     .form_field
-      = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, placeholder: 'Tags currently disabled', disabled: true, size: 82
+      = text_field_tag 'entry[tags]', @entry ? @entry.tags : nil, placeholder: 'Entry tags', size: 82
   = submit_tag 'Save', class: 'submit'
