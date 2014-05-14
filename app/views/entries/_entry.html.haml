@@ -1,7 +1,7 @@
 .entry
   .content.markdown
     = @display_entry.markdown_preview
-  - if @display_entry.tags
+  - if @display_entry.has_tags?
     .metadata
       Tags:
       - @display_entry.each_tag do |tag, idx|

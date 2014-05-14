@@ -63,23 +63,27 @@ class Entry < ActiveRecord::Base
   end
 
   def sanitize_tags
-    self.tags = tags.split(',').map(&:strip).join(', ') if tags
+    if tags
+      self.tags = tags.split(',').map(&:strip).join(', ') if tags
+    end
   end
 
   def each_tag
-    return tags unless tags.try(:split) && block_given?
+    return tags unless block_given?
     tags.split(', ').each_with_index do |tag, index|
       yield tag.strip, index
     end
   end
 
   def tag_count
-    return 0 unless tags.try(:split)
     tags.split(', ').count
   end
 
   def tag_match?(tag = '')
-    return false if tags.nil?
     tags.include?(tag)
+  end
+
+  def has_tags?
+    tags.length > 0
   end
 end
