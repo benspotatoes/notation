@@ -107,31 +107,44 @@ module Redcarpet
 
     # https://github.com/vmg/redcarpet/issues/323
     # Render text with checkboxes, not built in to default Redcarpet module
-    def render_with_checkboxes(text, data_options = {})
-      text = render(text)
+    def render_with_checkboxes(text, parser_options = {strict_parse_checklist: true}, data_options = {})
+      # Perform base rendering to convert lists appropriately
+      base_render = render(text)
+
+      # Convert all checkbox syntax to checkbox inputs
       checkbox_regex  = /\[(x|\s)\]/
       checkbox_match = false
-      text = text.gsub(checkbox_regex).with_index do |match, idx|
+      checkbox_render = base_render.gsub(checkbox_regex).with_index do |match, idx|
         checkbox_match = true
         checked = match =~ /x/ ? true : false
         check_box_tag "todo_#{idx}", '', false, data: data_options
       end
+
+      # Do some "repairing" if we know we've added checkbox inputs
       if checkbox_match
         lines = []
-        each_line = text.split("\n")
+        each_line = checkbox_render.split("\n")
         each_line.each_with_index do |line, idx|
+
+          # Append appropriate class to unordered lists that contain checkboxes
           if idx + 2 < each_line.count &&
                 line.match(/<ul>/) && each_line[idx + 1].match(/<li>/) &&
               ( each_line[idx + 1].match(/type="checkbox"/) ||
                 each_line[idx + 2].match(/type="checkbox"/))
-            lines << line.gsub('<ul>', "<ul class='todo'>")
-          else
-            lines << line
+            line_to_add = line.gsub('<ul>', "<ul class='todo'>")
+          elsif line.match(/<p><input id="todo_(\d+)"/) && parser_options[:strict_parse_checklist]
+            # There are cases where a checkbox is inadvertently added due to poor syntax,
+            # so we should take out the checkbox and remove faulty syntax
+            input = check_box_tag "todo_#{$1}", '', false, data: data_options
+            line_to_add = "#{line.gsub(input, '')}"
+          else line_to_add = line
+            line_to_add = line
           end
+
+          lines << line_to_add
         end
-        text = lines.join("\n")
+        final_render = lines.join("\n")
       end
-      render(text)
     end
   end
 end
