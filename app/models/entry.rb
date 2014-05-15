@@ -120,8 +120,8 @@ module Redcarpet
         lines = []
         each_line = text.split("\n")
         each_line.each_with_index do |line, idx|
-          next if idx + 2 > each_line.count
-          if line.match(/<ul>/) && each_line[idx + 1].match(/<li>/) &&
+          if idx + 2 < each_line.count &&
+                line.match(/<ul>/) && each_line[idx + 1].match(/<li>/) &&
               ( each_line[idx + 1].match(/type="checkbox"/) ||
                 each_line[idx + 2].match(/type="checkbox"/))
             lines << line.gsub('<ul>', "<ul class='todo'>")
