@@ -99,7 +99,7 @@ class EntriesController < ApplicationController
 
     def filter_entries_by_tag
       if tag = session[:by_tag]
-        @entries = @entries.select { |entry| entry.tag_match?(tag) }
+        @entries = @entries.select { |entry| entry.tag_match?(tag.downcase) }
       end
     end
 end

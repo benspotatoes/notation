@@ -21,8 +21,21 @@ class Entry < ActiveRecord::Base
     entry_id
   end
 
-  def markdown_preview
-    RENDERER.render(body).html_safe
+  def markdown_preview(with_checkboxes = nil)
+    if with_checkboxes
+      # Explicitly render with checkboxes
+      RENDERER.render_with_checkboxes(body).html_safe
+    elsif with_checkboxes.nil?
+      # Render with checkbox only if tags include 'todo'
+      if tag_match?('todo')
+        RENDERER.render_with_checkboxes(body).html_safe
+      else
+        RENDERER.render(body).html_safe
+      end
+    else
+      # Explicitly do not render with checkboxes
+      RENDERER.render(body).html_safe
+    end
   end
 
   def truncated_body
@@ -80,10 +93,45 @@ class Entry < ActiveRecord::Base
   end
 
   def tag_match?(tag = '')
-    tags.include?(tag)
+    tags.downcase.include?(tag)
   end
 
   def has_tags?
     tags.length > 0
+  end
+end
+
+module Redcarpet
+  class Markdown
+    include ActionView::Helpers
+
+    # https://github.com/vmg/redcarpet/issues/323
+    # Render text with checkboxes, not built in to default Redcarpet module
+    def render_with_checkboxes(text, data_options = {})
+      text = render(text)
+      checkbox_regex  = /\[(x|\s)\]/
+      checkbox_match = false
+      text = text.gsub(checkbox_regex).with_index do |match, idx|
+        checkbox_match = true
+        checked = match =~ /x/ ? true : false
+        check_box_tag "todo_#{idx}", '', false, data: data_options
+      end
+      if checkbox_match
+        lines = []
+        each_line = text.split("\n")
+        each_line.each_with_index do |line, idx|
+          next if idx + 2 > each_line.count
+          if line.match(/<ul>/) && each_line[idx + 1].match(/<li>/) &&
+              ( each_line[idx + 1].match(/type="checkbox"/) ||
+                each_line[idx + 2].match(/type="checkbox"/))
+            lines << line.gsub('<ul>', "<ul class='todo'>")
+          else
+            lines << line
+          end
+        end
+        text = lines.join("\n")
+      end
+      render(text)
+    end
   end
 end
