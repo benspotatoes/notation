@@ -6,6 +6,7 @@
     \::
     = link_to 'Edit', edit_entry_path(@display_entry.public_id), class: 'action'
     \::
-    = link_to 'Archive', archive_entry_path(@display_entry.public_id), class: 'action'
+    - @archive_action = @display_entry.archived? ? 'Unarchive' : 'Archive'
+    = link_to @archive_action, archive_entry_path(@display_entry.public_id), class: 'action'
     \::
     Tag

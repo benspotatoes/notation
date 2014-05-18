@@ -62,11 +62,10 @@ class EntriesController < ApplicationController
       # Unarchive an entry
       if @entry.unarchive
         flash[:success] = 'Entry successfully unarchived.'
-        redirect_to all_entries_path
       else
         flash[:error] = 'Error unarchiving entry.'
-        redirect_to show_entry_path(@entry.public_id)
       end
+        redirect_to show_entry_path(@entry.public_id)
     else
       # Archive an entry
       if @entry.archive
