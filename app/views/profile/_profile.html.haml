@@ -1,0 +1,9 @@
+.profile
+  %ul.profile_description
+    - if current_user.respond_to?(:username)
+      %li.profile_attr
+        Username: #{current_user.username}
+    %li.profile_attr
+      Email: #{current_user.email}
+    %li.profile_attr
+      Date Joined: #{current_user.created_at}

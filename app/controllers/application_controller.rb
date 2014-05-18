@@ -15,4 +15,12 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
+
+  def load_all_entries
+    if session[:visible_entries] == 'archived'
+      @entries = current_user.entries.where(archived: true).order(updated_at: :desc)
+    else
+      @entries = current_user.entries.where.not(archived: true).order(updated_at: :desc)
+    end
+  end
 end

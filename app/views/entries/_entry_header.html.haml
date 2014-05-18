@@ -8,5 +8,3 @@
     \::
     - @archive_action = @display_entry.archived? ? 'Unarchive' : 'Archive'
     = link_to @archive_action, archive_entry_path(@display_entry.public_id), class: 'action'
-    \::
-    Tag

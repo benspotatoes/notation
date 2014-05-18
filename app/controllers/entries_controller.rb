@@ -96,14 +96,6 @@ class EntriesController < ApplicationController
       end
     end
 
-    def load_all_entries
-      if session[:visible_entries] == 'archived'
-        @entries = current_user.entries.where(archived: true).order(updated_at: :desc)
-      else
-        @entries = current_user.entries.where.not(archived: true).order(updated_at: :desc)
-      end
-    end
-
     def entry_params
       params.require(:entry).permit(:title, :body, :tags)
     end

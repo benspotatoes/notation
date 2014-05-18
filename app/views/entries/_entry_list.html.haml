@@ -1,15 +1,18 @@
 .entry_list
-  = session[:entry_list_title]
-  - @entries.each do |entry|
-    .entry_item
-      .entry_title
-        = link_to entry.list_title, show_entry_path(entry.public_id)
-      .entry_tags
-        = '' # entry.tags
+  .entry_list_title
+    = session[:entry_list_title]
   .nav
     - if session[:visible_entries] == 'archived'
       = link_to 'Active', all_entries_path
     - else
       = link_to 'Archived', archived_entries_path
     |
+    = link_to 'Profile', show_profile_path(current_user.user_id)
+    |
     = link_to 'Sign Out', destroy_user_session_path, method: :delete
+  - @entries.each do |entry|
+    .entry_item
+      .entry_title
+        = link_to entry.list_title, show_entry_path(entry.public_id)
+      .entry_tags
+        = '' # entry.tags

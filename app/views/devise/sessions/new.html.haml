@@ -3,6 +3,7 @@
     .head
       Notation @ Ben's Potatoes
     .body
+      = render partial: 'shared/flash'
       .devise_form
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
           .entry_form_section

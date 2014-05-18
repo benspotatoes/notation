@@ -39,7 +39,7 @@ textarea, input {
   background-color: #d9edf7;
   opacity: 0.7;
 }
-.flash-error {
+.flash-error, .flash-alert {
   background-color: #f2dede;
   opacity: 0.7;
 }
@@ -108,7 +108,11 @@ textarea, input {
   }
 }
 
-.entry {
+.entry_list_title {
+  text-align: center;
+}
+
+.entry, .profile {
   padding: 10px;
   border: 1px solid black;
   width: 644px;
@@ -128,18 +132,18 @@ textarea, input {
   }
 }
 
-.entry_header {
+.entry_header, .profile_header {
   width: 500px;
   text-align: center;
 
-  .entry_title {
+  .entry_title, .profile_title {
     margin: 0 10px;
     display: block;
     font-weight: bold;
     font-style: italic;
   }
 
-  .entry_actions {
+  .entry_actions, .profile_actions {
     margin: 0 10px;
     display: inline-block;
 

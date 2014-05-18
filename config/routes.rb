@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   root 'pages#root'
 
-  scope 'users', controller: 'users' do
-    get ':id', action: 'show', as: 'show_user'
-    get ':id/edit', action: 'edit', as: 'edit_user'
-    put ':id/update', action: 'update', as: 'update_user'
-    delete ':id', action: 'destroy', as: 'destroy_user'
+  scope 'profile', controller: 'profile' do
+    get ':id', action: 'show', as: 'show_profile'
+    get ':id/edit', action: 'edit', as: 'edit_profile'
+    put ':id/update', action: 'update', as: 'update_profile'
+    delete ':id', action: 'destroy', as: 'destroy_profile'
   end
 
   scope 'entries', controller: 'entries' do
