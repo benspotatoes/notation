@@ -46,6 +46,10 @@ class Entry < ActiveRecord::Base
     update_attribute(:archived, true)
   end
 
+  def unarchive
+    update_attribute(:archived, false)
+  end
+
   def set_title
     if title.nil? || title.empty?
       num_user_entries = Entry.where(user_id: user_id).count
