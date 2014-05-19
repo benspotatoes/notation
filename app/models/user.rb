@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
 
   before_save :set_user_id
 
+  validates :username, uniqueness: { case_insensitive: false }
+
+  attr_accessor :login
+
   USER_ID_LENGTH = 10
 
   def set_user_id
@@ -22,6 +26,15 @@ class User < ActiveRecord::Base
       super
     else
       false
+    end
+  end
+
+  def self.find_first_by_auth_conditions(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions).where(["lower(username) = :value or lower(email) = :value", {value: login.downcase}]).first
+    else
+      where(conditions).first
     end
   end
 end

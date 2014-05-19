@@ -1,6 +1,6 @@
 body {
   min-width: 900px;
-  max-width: 1900px;
+  max-width: 1000px;
 
   // Inherited from Markdown.less
   font-family: Helvetica, arial, sans-serif;
@@ -21,7 +21,7 @@ textarea, input {
   max-width: @content_max_width;
 }
 
-.flash-message {
+.flash-message, #error_explanation {
   border-radius: 15px;
   margin: 10px;
   padding: 10px 0;
@@ -39,7 +39,7 @@ textarea, input {
   background-color: #d9edf7;
   opacity: 0.7;
 }
-.flash-error, .flash-alert {
+.flash-error, .flash-alert, #error_explanation {
   background-color: #f2dede;
   opacity: 0.7;
 }

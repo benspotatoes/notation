@@ -6,9 +6,10 @@
       = render partial: 'shared/flash'
       .devise_form
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+          = devise_error_messages!
           .entry_form_section
             .form_field
-              = f.email_field :email, autofocus: true, placeholder: 'Email'
+              = f.text_field :login, autofocus: true, placeholder: 'Username or email'
           .entry_form_section
             .form_field
               = f.password_field :password, autocomplete: "off", placeholder: 'Password'
