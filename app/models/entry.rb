@@ -37,8 +37,8 @@ class Entry < ActiveRecord::Base
     CRYPT.decrypt_and_verify(tags).to_s
   end
 
-  def encrypt_data
-    return true if id
+  def encrypt_data(override = false)
+    return true if id && !override
     self.title = CRYPT.encrypt_and_sign(title)
     self.body = CRYPT.encrypt_and_sign(body)
     self.tags = CRYPT.encrypt_and_sign(tags)
