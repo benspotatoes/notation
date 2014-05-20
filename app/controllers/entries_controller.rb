@@ -22,7 +22,14 @@ class EntriesController < ApplicationController
     session[:entry_list_title] = "Tag: '#{tag}'"
 
     filter_entries_by_tag
-    render 'index'
+
+    if @display_entry = @entry = @entries.first
+      render 'show'
+    else
+      @entry_form_path = create_entry_path
+      @entry_form_request = :post
+      render 'index'
+    end
   end
 
   def create
@@ -30,6 +37,16 @@ class EntriesController < ApplicationController
     @entry.user = current_user
     if @entry.save
       flash[:success] = 'Entry successfully saved.'
+
+      # When creating a new entry, always show active entries
+      session[:entry_list_title] = 'Active entries'
+      session.delete(:by_tag)
+
+      if session.delete(:visible_entries)
+        # Reload all entries to get 'active' ones
+        load_all_entries
+      end
+
       redirect_to show_entry_path(@entry.public_id)
     else
       flash[:error] = 'Error saving entry.'
@@ -83,7 +100,14 @@ class EntriesController < ApplicationController
     session[:visible_entries] = 'archived'
     session.delete(:by_tag)
     load_all_entries
-    render 'index'
+
+    if @display_entry = @entry = @entries.first
+      render 'show'
+    else
+      @entry_form_path = create_entry_path
+      @entry_form_request = :post
+      render 'index'
+    end
   end
 
   private
