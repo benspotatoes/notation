@@ -1,11 +1,11 @@
 = form_tag @entry_form_path, method: @entry_form_request do
   .entry_form_section
     .form_field
-      = text_field_tag 'entry[title]', @entry ? @entry.decrypted_title : nil, placeholder: 'Entry title', size: 82
+      = text_field_tag 'entry[title]', @entry ? @entry.decrypted_title : nil, placeholder: 'Entry title', size: 77
   .entry_form_section
     .form_field
-      = text_area_tag 'entry[body]', @entry ? @entry.decrypted_body : nil, cols: 80, rows: 20
+      = text_area_tag 'entry[body]', @entry ? @entry.decrypted_body : nil, placeholder: 'Entry body', cols: 75, rows: 20
   .entry_form_section
     .form_field
-      = text_field_tag 'entry[tags]', @entry ? @entry.decrypted_tags : nil, placeholder: 'Entry tags', size: 82
+      = text_field_tag 'entry[tags]', @entry ? @entry.decrypted_tags : nil, placeholder: 'Entry tags', size: 77
   = submit_tag 'Save', class: 'submit'
