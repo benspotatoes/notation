@@ -66,7 +66,17 @@ class EntriesController < ApplicationController
   end
 
   def update
-    if @entry.update_attributes(entry_params)
+    if @entry.new_title?(entry_params[:title])
+      @entry.title = entry_params[:title]
+    end
+    if @entry.new_body?(entry_params[:body])
+      @entry.body = entry_params[:body]
+    end
+    if @entry.new_tags?(entry_params[:tags])
+      @entry.tags = entry_params[:tags]
+    end
+
+    if @entry.save
       flash[:success] = 'Entry successfully updated.'
     else
       flash[:error] = 'Error updating entry.'

@@ -25,6 +25,8 @@ class Entry < ActiveRecord::Base
           'X'*32))
     end
 
+  SPECIAL_TAGS = ['todo', 'read-later']
+
   def decrypted_title
     CRYPT.decrypt_and_verify(title).to_s
   end
@@ -38,10 +40,21 @@ class Entry < ActiveRecord::Base
   end
 
   def encrypt_data(override = false)
-    return true if id && !override
-    self.title = CRYPT.encrypt_and_sign(title)
-    self.body = CRYPT.encrypt_and_sign(body)
-    self.tags = CRYPT.encrypt_and_sign(tags)
+    self.title = CRYPT.encrypt_and_sign(title) if title_changed? || override
+    self.body = CRYPT.encrypt_and_sign(body) if body_changed? || override
+    self.tags = CRYPT.encrypt_and_sign(tags) if tags_changed? || override
+  end
+
+  def new_title?(check)
+    check != CRYPT.decrypt_and_verify(title)
+  end
+
+  def new_body?(check)
+    check != CRYPT.decrypt_and_verify(body)
+  end
+
+  def new_tags?(check)
+    check != CRYPT.decrypt_and_verify(tags)
   end
 
   def set_entry_id
@@ -57,17 +70,17 @@ class Entry < ActiveRecord::Base
   def markdown_preview(with_checkboxes = nil)
     if with_checkboxes
       # Explicitly render with checkboxes
-      RENDERER.render_with_checkboxes(decrypted_title).html_safe
+      RENDERER.render_with_checkboxes(decrypted_body).html_safe
     elsif with_checkboxes.nil?
       # Render with checkbox only if tags include 'todo'
       if tag_match?('todo')
-        RENDERER.render_with_checkboxes(decrypted_title).html_safe
+        RENDERER.render_with_checkboxes(decrypted_body).html_safe
       else
-        RENDERER.render(decrypted_title).html_safe
+        RENDERER.render(decrypted_body).html_safe
       end
     else
       # Explicitly do not render with checkboxes
-      RENDERER.render(decrypted_title).html_safe
+      RENDERER.render(decrypted_body).html_safe
     end
   end
 
@@ -155,7 +168,7 @@ module Redcarpet
       checkbox_render = base_render.gsub(checkbox_regex).with_index do |match, idx|
         checkbox_match = true
         checked = match =~ /x/ ? true : false
-        check_box_tag "todo_#{idx}", '', false, data: data_options
+        check_box_tag "todo_#{idx}", '', checked, data: data_options, disabled: true
       end
 
       # Do some "repairing" if we know we've added checkbox inputs
@@ -181,7 +194,9 @@ module Redcarpet
 
           lines << line_to_add
         end
-        final_render = lines.join("\n")
+        return final_render = lines.join("\n")
+      else
+        return checkbox_render
       end
     end
   end

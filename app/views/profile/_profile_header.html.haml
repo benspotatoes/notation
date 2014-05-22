@@ -1,6 +1,6 @@
 .profile_header
   .profile_title
-    = current_user.respond_to?(:username) ? current_user.username : current_user.email
+    = current_user.respond_to?(:username) ? current_user.username || current_user.email : current_user.email
   .profile_actions
     = link_to 'Edit', edit_profile_path(current_user.user_id), class: 'action'
     \::
