@@ -26,5 +26,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # API business
+  scope 'v1', controller: 'api' do
+    post 'add', action: 'add_entry', as: 'v1_add_entry'
+    post 'remove', action: 'remove_entry', as: 'v1_remove_entry'
+  end
+
   devise_for :users
 end

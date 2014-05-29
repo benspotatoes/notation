@@ -15,6 +15,9 @@ class Entry < ActiveRecord::Base
   TRUNCATED_DISP_TITLE_LENGTH = 25
   ENTRY_TITLE_TEMPLATE = 'Note # '
 
+  TODO_ENTRY_TAG = 'todo'
+  READ_IT_LATER_ENTRY_TAG = 'read-it-later'
+
   CRYPT =
     if Rails.env.production?
       ActiveSupport::MessageEncryptor.new(
@@ -158,11 +161,18 @@ class Entry < ActiveRecord::Base
     end
   end
 
-  def each_tag
-    return tags unless block_given?
+  def each_tag(callback = false)
+    return decrypted_tags unless block_given?
 
-    decrypted_tags.split(', ').each_with_index do |tag, index|
-      yield tag.strip, index
+    if callback
+      # For a callback, tags have not been encrypted yet
+      tags.split(', ').each_with_index do |tag, index|
+        yield tag.strip, index
+      end
+    else
+      decrypted_tags.split(', ').each_with_index do |tag, index|
+        yield tag.strip, index
+      end
     end
   end
 
@@ -170,17 +180,28 @@ class Entry < ActiveRecord::Base
     decrypted_tags.split(', ').count
   end
 
-  def tag_match?(tag = '', callback = false)
-    if callback
-      # For a callback, tags have not been encrypted yet
-      tags.downcase.include?(tag)
-    else
-      decrypted_tags.downcase.include?(tag)
+  def tag_match?(target = '', callback = false)
+    each_tag(callback) do |tag|
+      if tag.downcase == target
+        return true
+      end
     end
+
+    return false
   end
 
   def has_tags?
     decrypted_tags.length > 0
+  end
+
+  def check_tags(target)
+    unless tag_match?(target)
+      if decrypted_tags.empty?
+        update_attribute(:tags, target)
+      else
+        update_attribute(:tags, decrypted_tags + "#{target}")
+      end
+    end
   end
 end
 

@@ -15,6 +15,7 @@ gem 'turbolinks'
 gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
 gem 'newrelic_rpm' # New Relic reporting
+gem 'mechanize' # Read-it-later entry parsing
 
 group :production do
   gem 'mysql2', '~> 0.3.15'
