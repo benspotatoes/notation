@@ -1,9 +1,12 @@
 class Entry < ActiveRecord::Base
+  enum entry_type: [ :default, :note, :todo, :read_it_later ]
+
   belongs_to :user
 
   before_save :set_title
   before_save :set_entry_id
   before_save :sanitize_tags
+  before_save :set_entry_type
   before_save :encrypt_data
 
   ENTRY_ID_LENGTH = 5
@@ -25,7 +28,19 @@ class Entry < ActiveRecord::Base
           'X'*32))
     end
 
-  SPECIAL_TAGS = ['todo', 'read-later']
+  def set_entry_type
+    if default?
+      if !tags.empty?
+        Entry.entry_types.each do |type, int|
+          if tag_match?(type, true)
+            self.entry_type = type
+            return
+          end
+        end
+      end
+      self.entry_type = 'note'
+    end
+  end
 
   def decrypted_title
     # Title is guaranteed to exist with :set_title
@@ -155,8 +170,13 @@ class Entry < ActiveRecord::Base
     decrypted_tags.split(', ').count
   end
 
-  def tag_match?(tag = '')
-    decrypted_tags.downcase.include?(tag)
+  def tag_match?(tag = '', callback = false)
+    if callback
+      # For a callback, tags have not been encrypted yet
+      tags.downcase.include?(tag)
+    else
+      decrypted_tags.downcase.include?(tag)
+    end
   end
 
   def has_tags?
