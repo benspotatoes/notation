@@ -28,15 +28,18 @@ class Entry < ActiveRecord::Base
   SPECIAL_TAGS = ['todo', 'read-later']
 
   def decrypted_title
+    # Title is guaranteed to exist with :set_title
     CRYPT.decrypt_and_verify(title).to_s
   end
 
   def decrypted_body
-    CRYPT.decrypt_and_verify(body).to_s
+    # Body does not always exist, can be nil
+    body.empty? ? '' : CRYPT.decrypt_and_verify(body).to_s
   end
 
   def decrypted_tags
-    CRYPT.decrypt_and_verify(tags).to_s
+    # Tags default to an empty string
+    tags.empty? ? '' : CRYPT.decrypt_and_verify(tags).to_s
   end
 
   def encrypt_data(override = false)
@@ -59,8 +62,17 @@ class Entry < ActiveRecord::Base
 
   def set_entry_id
     if entry_id.nil?
-      self.entry_id = SecureRandom.hex(ENTRY_ID_LENGTH)
+      random_id = generate_entry_id
+      while !self.class.find_by(entry_id: random_id, user_id: user_id).nil?
+        # In the rare case we do run into a duplicate, get another one
+        random_id = generate_entry_id
+      end
+      self.entry_id = random_id
     end
+  end
+
+  def generate_entry_id
+    SecureRandom.hex(ENTRY_ID_LENGTH)
   end
 
   def public_id
@@ -127,7 +139,7 @@ class Entry < ActiveRecord::Base
 
   def sanitize_tags
     if tags
-      self.tags = tags.split(',').map(&:strip).join(', ') if tags
+      self.tags = tags.split(',').map(&:strip).join(', ')
     end
   end
 

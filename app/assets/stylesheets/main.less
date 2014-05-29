@@ -8,10 +8,20 @@ body {
   line-height: 1.6;
 }
 
+* { box-sizing: border-box; }
+
 textarea, input {
-  font-family: "Courier New", Courier, monospace;
   font-size: 15px;
   line-height: 1.6;
+}
+
+a, a:visited {
+  color: #F2BC0A
+}
+
+a:hover {
+  color: black;
+  text-decoration: none;
 }
 
 .flash {
@@ -71,6 +81,20 @@ textarea, input {
   margin-bottom: 10px;
 }
 
+.entry_form_input {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.entry_form_text_area {
+  width: 700px;
+  height: 500px;
+}
+
+.entry_form_text_field {
+  width: 700px;
+  height: 50px;
+}
+
 .form_label {
   display: inline-block;
   margin-right: 10px;
@@ -81,6 +105,7 @@ textarea, input {
 }
 
 @entry_list_width: 200px;
+@header_height: 50px;
 .entry_list {
   display: block;
   position: fixed;
@@ -88,16 +113,7 @@ textarea, input {
   top: 0;
   bottom: 0;
   width: @entry_list_width;
-  margin: 10px 10px;
-
-  a, a:visited {
-    color: #F2BC0A
-  }
-
-  a:hover {
-    color: black;
-    text-decoration: none;
-  }
+  margin: @header_height 10px 10px 10px;
 
   .entry_item {
     border: 1px solid #dddddd;
@@ -122,14 +138,6 @@ textarea, input {
   padding: 0px 10px;
   border: 1px solid #dddddd;
   font-size: 15px;
-
-  a, a:visited {
-    color: #F2BC0A
-  }
-
-  a:hover {
-    color: black;
-  }
 }
 
 .entry_header, .profile_header {
@@ -146,14 +154,6 @@ textarea, input {
   .entry_actions, .profile_actions {
     margin: 0 10px;
     display: inline-block;
-
-    a, a:visited {
-      color: #F2BC0A
-    }
-
-    a:hover {
-      color: black;
-    }
   }
 
   .action {
@@ -166,7 +166,7 @@ textarea, input {
 .main_content {
   display: block;
   float: left;
-  margin: 10px 0;
+  margin: @header_height 0 10px 0;
   margin-left: @entry_list_width + 25px;
   padding: 0 25px;
   min-width: @content_min_width;

@@ -9,7 +9,7 @@
     |
     = link_to 'Profile', show_profile_path(current_user.user_id)
     |
-    = link_to 'Sign Out', destroy_user_session_path, method: :delete
+    = link_to 'Sign out', destroy_user_session_path, method: :delete
   - @entries.each do |entry|
     .entry_item
       .entry_title

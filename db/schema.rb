@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140518171817) do
+ActiveRecord::Schema.define(version: 20140528070403) do
 
   create_table "deleted_users", force: true do |t|
     t.integer  "primary_id",  null: false
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20140518171817) do
 
   create_table "entries", force: true do |t|
     t.integer  "user_id",                    null: false
-    t.text     "body"
+    t.text     "body",       default: ""
     t.boolean  "archived",   default: false
     t.string   "tags",       default: ""
     t.datetime "created_at"
