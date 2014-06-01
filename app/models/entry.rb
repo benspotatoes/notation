@@ -187,16 +187,6 @@ class Entry < ActiveRecord::Base
   def has_tags?
     decrypted_tags.length > 0
   end
-
-  def check_tags(target)
-    unless tag_match?(target)
-      if decrypted_tags.empty?
-        update_attribute(:tags, target)
-      else
-        update_attribute(:tags, decrypted_tags + "#{target}")
-      end
-    end
-  end
 end
 
 module Redcarpet

@@ -12,15 +12,12 @@ class ApiController < ApplicationController
     case @entry_type
     when 'read_it_later'
       page = AGENT.get(@entry_params[:url])
-      entry = Entry.new(user_id: @entry_params[:user_id],
+      entry = ReadEntry.new(user_id: @entry_params[:user_id],
                         title: page.title,
-                        tags: @entry_params[:tags])
-      entry.body =
-        %Q(#{page.uri.host}\n#{@entry_params[:notes]})
-      if entry.save!
-        entry.check_tags(Entry::READ_IT_LATER_ENTRY_TAG)
-        head :created
-      end
+                        tags: @entry_params[:tags],
+                        url: @entry_params[:url],
+                        body: @entry_params[:notes])
+      head :created if entry.save!
     end
   end
 

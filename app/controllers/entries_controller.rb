@@ -8,6 +8,7 @@ class EntriesController < ApplicationController
     @entry_form_request = :post
 
     session[:entry_list_title] = 'Active entries'
+    session.delete(:visible_entries)
     session.delete(:by_tag)
 
     load_all_entries
@@ -31,7 +32,13 @@ class EntriesController < ApplicationController
   end
 
   def create
-    @entry = Entry.new(entry_params)
+    case session[:entry_tag]
+    when Entry::READ_ENTRY_TAG
+      @entry = ReadEntry.new(entry_params)
+    else
+      @entry = Entry.new(entry_params)
+    end
+
     @entry.user = current_user
     if @entry.save
       flash[:success] = 'Entry successfully saved.'
