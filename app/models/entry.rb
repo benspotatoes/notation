@@ -1,5 +1,5 @@
 class Entry < ActiveRecord::Base
-  enum entry_type: [ :default, :note, :todo, :read_it_later ]
+  enum entry_type: [ :default, :note, :todo, :read_later ]
 
   belongs_to :user
 
@@ -15,8 +15,14 @@ class Entry < ActiveRecord::Base
   TRUNCATED_DISP_TITLE_LENGTH = 25
   ENTRY_TITLE_TEMPLATE = 'Note # '
 
-  TODO_ENTRY_TAG = 'todo'
-  READ_IT_LATER_ENTRY_TAG = 'read-it-later'
+  NOTE_ENTRY_TAG = 'now'
+  TODO_ENTRY_TAG = 'then'
+  READ_ENTRY_TAG = 'later'
+  ENTRY_TAG_TYPES = {
+    NOTE_ENTRY_TAG => 'note',
+    TODO_ENTRY_TAG => 'todo',
+    READ_ENTRY_TAG => 'read_later'
+  }
 
   CRYPT =
     if Rails.env.production?
@@ -32,7 +38,7 @@ class Entry < ActiveRecord::Base
     end
 
   def set_entry_type
-    if default?
+    if tags_changed? || default?
       if !tags.empty?
         Entry.entry_types.each do |type, int|
           if tag_match?(type, true)
@@ -41,7 +47,7 @@ class Entry < ActiveRecord::Base
           end
         end
       end
-      self.entry_type = 'note'
+      self.entry_type = ENTRY_TAG_TYPES[NOTE_ENTRY_TAG]
     end
   end
 
@@ -64,18 +70,6 @@ class Entry < ActiveRecord::Base
     self.title = CRYPT.encrypt_and_sign(title) if title_changed? || override
     self.body = CRYPT.encrypt_and_sign(body) if body_changed? || override
     self.tags = CRYPT.encrypt_and_sign(tags) if tags_changed? || override
-  end
-
-  def new_title?(check)
-    check != CRYPT.decrypt_and_verify(title)
-  end
-
-  def new_body?(check)
-    check != CRYPT.decrypt_and_verify(body)
-  end
-
-  def new_tags?(check)
-    check != CRYPT.decrypt_and_verify(tags)
   end
 
   def set_entry_id

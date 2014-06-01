@@ -1,15 +1,21 @@
 .header
   .brand
-    = link_to 'Now', root_path
+    = link_to 'Now', all_entries_path(Entry::NOTE_ENTRY_TAG)
+    - if session[:entry_tag] == Entry::NOTE_ENTRY_TAG
+      \*
     |
-    = link_to 'Then', '#'
+    = link_to 'Then', all_entries_path(Entry::TODO_ENTRY_TAG)
+    - if session[:entry_tag] == Entry::TODO_ENTRY_TAG
+      \*
     |
-    = link_to 'Later'
+    = link_to 'Later', all_entries_path(Entry::READ_ENTRY_TAG)
+    - if session[:entry_tag] == Entry::READ_ENTRY_TAG
+      \*
 
   .nav
-    = link_to 'Profile', show_profile_path(current_user.user_id)
-    |
     - if user_signed_in?
+      = link_to 'Profile', show_profile_path(current_user.user_id)
+      |
       = link_to 'Sign out', destroy_user_session_path, method: :delete
     - else
       = link_to 'Sign in', new_user_session_path

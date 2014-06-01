@@ -9,9 +9,9 @@ Rails.application.routes.draw do
   end
 
   scope 'entries', controller: 'entries' do
-    get '/', action: 'index', as: 'all_entries'
-    get 'archived', action: 'archived_entries', as: 'archived_entries'
-    get 'by_tag/:tag', action: 'by_tag', as: 'entries_by_tag'
+    get '/:entry_tag', action: 'index', as: 'all_entries'
+    get ':entry_tag/archived', action: 'archived_entries', as: 'archived_entries'
+    get ':entry_tag/by_tag/:tag', action: 'by_tag', as: 'entries_by_tag'
   end
 
   scope 'entry', controller: 'entries' do

@@ -19,11 +19,13 @@ class ApplicationController < ActionController::Base
   end
 
   def load_all_entries
+    @entries = current_user.entries.where(entry_type: Entry.entry_types[Entry::ENTRY_TAG_TYPES[session[:entry_tag]]])
     if session[:visible_entries] == 'archived'
-      @entries = current_user.entries.where(archived: true, entry_type: Entry::TODO_ENTRY_TAG).order(updated_at: :desc)
+      @entries = @entries.where(archived: true)
     else
-      @entries = current_user.entries.where(entry_type: Entry::TODO_ENTRY_TAG).where.not(archived: true).order(updated_at: :desc)
+      @entries = @entries.where.not(archived: true)
     end
+    @entries = @entries.order(updated_at: :desc)
   end
 
   protected

@@ -1,11 +1,14 @@
 .entry_list
   .entry_list_title
     = session[:entry_list_title]
+    (
+    = session[:entry_tag]
+    )
   .entry_list_header
     - if session[:visible_entries] == 'archived'
-      = link_to 'Show active', all_entries_path
+      = link_to 'Show active', all_entries_path(session[:entry_tag])
     - else
-      = link_to 'Show archived', archived_entries_path
+      = link_to 'Show archived', archived_entries_path(session[:entry_tag])
   - @entries.each do |entry|
     .entry_item
       .entry_title
