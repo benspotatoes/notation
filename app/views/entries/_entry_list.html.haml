@@ -3,12 +3,12 @@
     = session[:entry_list_title]
   .entry_list_header
     - if session[:visible_entries] == 'archived'
-      = link_to 'Show active', all_note_entries_path
+      = link_to 'Show active', all_entries_path
     - else
-      = link_to 'Show archived', archived_note_entries_path
+      = link_to 'Show archived', archived_entries_path
   - @entries.each do |entry|
     .entry_item
       .entry_title
-        = link_to entry.list_title, show_note_entry_path(entry.public_id)
+        = link_to entry.list_title, show_entry_path(entry.public_id)
       .entry_tags
         = '' # entry.tags

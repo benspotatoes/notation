@@ -9,21 +9,17 @@ Rails.application.routes.draw do
   end
 
   scope 'entries', controller: 'entries' do
-    scope 'now' do
-      get '/', action: 'index', as: 'all_note_entries'
-      get 'archived', action: 'archived_entries', as: 'archived_note_entries'
-      get 'by_tag/:tag', action: 'by_tag', as: 'note_entries_by_tag'
-    end
+    get '/', action: 'index', as: 'all_entries'
+    get 'archived', action: 'archived_entries', as: 'archived_entries'
+    get 'by_tag/:tag', action: 'by_tag', as: 'entries_by_tag'
   end
 
   scope 'entry', controller: 'entries' do
-    scope 'now' do
-      post '/create', action: 'create', as: 'create_note_entry'
-      get ':id', action: 'show', as: 'show_note_entry'
-      get ':id/edit', action: 'edit', as: 'edit_note_entry'
-      put ':id', action: 'update', as: 'update_note_entry'
-      get ':id/archive', action: 'archive', as: 'archive_note_entry'
-    end
+    post '/create', action: 'create', as: 'create_entry'
+    get ':id', action: 'show', as: 'show_entry'
+    get ':id/edit', action: 'edit', as: 'edit_entry'
+    put ':id', action: 'update', as: 'update_entry'
+    get ':id/archive', action: 'archive', as: 'archive_entry'
   end
 
   # API business

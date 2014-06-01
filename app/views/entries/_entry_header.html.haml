@@ -8,10 +8,10 @@
       New entry
   .entry_actions
     - if @display_entry
-      = link_to 'New', all_note_entries_path, class: 'action'
+      = link_to 'New', all_entries_path, class: 'action'
       \::
       - if !@display_entry.archived?
-        = link_to 'Edit', edit_note_entry_path(@display_entry.public_id), class: 'action'
+        = link_to 'Edit', edit_entry_path(@display_entry.public_id), class: 'action'
         \::
       - @archive_action = @display_entry.archived? ? 'Unarchive' : 'Archive'
-      = link_to @archive_action, archive_note_entry_path(@display_entry.public_id), class: 'action'
+      = link_to @archive_action, archive_entry_path(@display_entry.public_id), class: 'action'
