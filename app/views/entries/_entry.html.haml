@@ -5,6 +5,6 @@
     .metadata
       Tags:
       - @display_entry.each_tag do |tag, idx|
-        = link_to tag, entries_by_tag_path(tag)
+        = link_to tag, note_entries_by_tag_path(tag)
         - unless idx == @display_entry.tag_count - 1
           = ", "

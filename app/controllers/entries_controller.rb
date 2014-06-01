@@ -4,7 +4,7 @@ class EntriesController < ApplicationController
   before_action :load_entry, only: [:show, :edit, :update, :archive]
 
   def index
-    @entry_form_path = create_entry_path
+    @entry_form_path = create_note_entry_path
     @entry_form_request = :post
 
     session[:entry_list_title] = 'Active entries'
@@ -26,7 +26,7 @@ class EntriesController < ApplicationController
     if @display_entry = @entry = @entries.first
       render 'show'
     else
-      @entry_form_path = create_entry_path
+      @entry_form_path = create_note_entry_path
       @entry_form_request = :post
       render 'index'
     end
@@ -47,10 +47,10 @@ class EntriesController < ApplicationController
         load_all_entries
       end
 
-      redirect_to show_entry_path(@entry.public_id)
+      redirect_to show_note_entry_path(@entry.public_id)
     else
       flash[:error] = 'Error saving entry.'
-      redirect_to all_entries_path
+      redirect_to all_note_entries_path
     end
   end
 
@@ -61,7 +61,7 @@ class EntriesController < ApplicationController
 
   def edit
     @display_entry = @entry
-    @entry_form_path = update_entry_path
+    @entry_form_path = update_note_entry_path
     @entry_form_request = :put
   end
 
@@ -81,7 +81,7 @@ class EntriesController < ApplicationController
     else
       flash[:error] = 'Error updating entry.'
     end
-    redirect_to show_entry_path(@entry.public_id)
+    redirect_to show_note_entry_path(@entry.public_id)
   end
 
   def archive
@@ -92,15 +92,15 @@ class EntriesController < ApplicationController
       else
         flash[:error] = 'Error unarchiving entry.'
       end
-        redirect_to show_entry_path(@entry.public_id)
+        redirect_to show_note_entry_path(@entry.public_id)
     else
       # Archive an entry
       if @entry.archive
         flash[:success] = 'Entry successfully archived.'
-        redirect_to all_entries_path
+        redirect_to all_note_entries_path
       else
         flash[:error] = 'Error archiving entry.'
-        redirect_to show_entry_path(@entry.public_id)
+        redirect_to show_note_entry_path(@entry.public_id)
       end
     end
   end
@@ -114,7 +114,7 @@ class EntriesController < ApplicationController
     if @display_entry = @entry = @entries.first
       render 'show'
     else
-      @entry_form_path = create_entry_path
+      @entry_form_path = create_note_entry_path
       @entry_form_request = :post
       render 'index'
     end
@@ -125,7 +125,7 @@ class EntriesController < ApplicationController
       @entry = Entry.find_by(entry_id: params[:id], user_id: current_user.id)
       if @entry.nil? || (@entry.user != current_user)
         flash[:error] = 'You do not have permission to view that entry.'
-        redirect_to all_entries_path
+        redirect_to all_note_entries_path
         return
       end
     end

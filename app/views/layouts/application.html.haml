@@ -6,6 +6,8 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
+    %header
+      = render partial: 'shared/header'
     - if user_signed_in?
       = render partial: 'shared/sidebar'
     = yield

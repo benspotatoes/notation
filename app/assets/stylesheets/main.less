@@ -1,18 +1,31 @@
+* { box-sizing: border-box; }
+
 body {
-  min-width: 900px;
-  max-width: 1000px;
+  width: 900px;
 
   // Inherited from Markdown.less
   font-family: Helvetica, arial, sans-serif;
   font-size: 15px;
   line-height: 1.6;
-}
 
-* { box-sizing: border-box; }
+  overflow-wrap: break-word;
+}
 
 textarea, input {
   font-size: 15px;
   line-height: 1.6;
+}
+
+header {
+  height: @header_height;
+  padding: 10px 0;
+  display: block;
+}
+
+.header {
+  padding: 10px 0;
+  border: 1px solid black;
+  margin-left: 25px;
 }
 
 a, a:visited {
@@ -22,6 +35,19 @@ a, a:visited {
 a:hover {
   color: black;
   text-decoration: none;
+}
+
+.brand {
+  // border: 1px solid black;
+  display: inline-block;
+  margin-left: 25px;
+}
+
+.nav {
+  // border: 1px solid black;
+  display: block;
+  float: right;
+  margin-right: 25px;
 }
 
 .flash {
@@ -92,7 +118,7 @@ a:hover {
 
 .entry_form_text_field {
   width: 700px;
-  height: 50px;
+  height: 25px;
 }
 
 .form_label {
@@ -104,14 +130,14 @@ a:hover {
   display: inline-block;
 }
 
-@entry_list_width: 200px;
-@header_height: 50px;
+@entry_list_width: 175px;
+@header_height: 75px;
 .entry_list {
   display: block;
-  position: fixed;
+  position: absolute;
   overflow-y: scroll;
   top: 0;
-  bottom: 0;
+  height: 100%;
   width: @entry_list_width;
   margin: @header_height 10px 10px 10px;
 
@@ -124,14 +150,14 @@ a:hover {
   }
 }
 
-.entry_list_title {
+.entry_list_title, .entry_list_header {
   text-align: center;
 }
 
 .entry, .profile {
   padding: 10px;
   border: 1px solid black;
-  width: 644px;
+  width: 700px;
 }
 
 .metadata {
@@ -146,13 +172,12 @@ a:hover {
 
   .entry_title, .profile_title {
     margin: 0 10px;
-    display: block;
+    display: inline-block;
     font-weight: bold;
     font-style: italic;
   }
 
   .entry_actions, .profile_actions {
-    margin: 0 10px;
     display: inline-block;
   }
 
@@ -166,7 +191,7 @@ a:hover {
 .main_content {
   display: block;
   float: left;
-  margin: @header_height 0 10px 0;
+  margin: 25px 0 10px 0;
   margin-left: @entry_list_width + 25px;
   padding: 0 25px;
   min-width: @content_min_width;
