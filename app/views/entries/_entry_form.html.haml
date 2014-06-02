@@ -1,12 +1,11 @@
 = form_tag @entry_form_path, method: @entry_form_request do
-  -if !for_read_entry?
-    .entry_form_section
-      .form_field
-        = text_field_tag 'entry[title]', @entry ? @entry.decrypted_title : nil, placeholder: 'Entry title', class: 'entry_form_input entry_form_text_field'
+  .entry_form_section
+    .form_field
+      = text_field_tag 'entry[title]', @entry ? @entry.decrypted_title : nil, placeholder: for_read_entry? ? 'Entry title, set automatically' : 'Entry title', class: 'entry_form_input entry_form_text_field', disabled: for_read_entry?
   - if for_read_entry?
     .entry_form_section
       .form_field
-        = url_field_tag 'entry[url]', @entry ? @entry.url : nil, placeholder: 'Entry url', class: 'entry_form_input entry_form_text_field'
+        = url_field_tag 'entry[url]', @entry && (@read_entry = @entry.read_entry) ? @read_entry.url : nil, placeholder: 'Entry url', class: 'entry_form_input entry_form_text_field'
   .entry_form_section
     .form_field
       = text_area_tag 'entry[body]', @entry ? @entry.decrypted_body : nil, placeholder: 'Entry body', class: 'entry_form_input entry_form_text_area'

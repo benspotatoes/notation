@@ -1,21 +1,12 @@
 .header
   .brand
-    = link_to 'Now', all_entries_path(Entry::NOTE_ENTRY_TAG)
-    - if session[:entry_tag] == Entry::NOTE_ENTRY_TAG
-      \*
-    |
-    = link_to 'Then', all_entries_path(Entry::TODO_ENTRY_TAG)
-    - if session[:entry_tag] == Entry::TODO_ENTRY_TAG
-      \*
-    |
-    = link_to 'Later', all_entries_path(Entry::READ_ENTRY_TAG)
-    - if session[:entry_tag] == Entry::READ_ENTRY_TAG
-      \*
+    = link_to 'NOW', all_entries_path(Entry::NOTE_ENTRY_TAG), class: session[:entry_tag] == Entry::NOTE_ENTRY_TAG ? 'active_index_nav' : 'index_nav'
+    = link_to 'THEN', all_entries_path(Entry::TODO_ENTRY_TAG), class: session[:entry_tag] == Entry::TODO_ENTRY_TAG ? 'active_index_nav' : 'index_nav'
+    = link_to 'LATER', all_entries_path(Entry::READ_ENTRY_TAG), class: session[:entry_tag] == Entry::READ_ENTRY_TAG ? 'active_index_nav' : 'index_nav'
 
   .nav
     - if user_signed_in?
-      = link_to 'Profile', show_profile_path(current_user.user_id)
-      |
-      = link_to 'Sign out', destroy_user_session_path, method: :delete
+      = link_to 'PROFILE', show_profile_path(current_user.user_id)
+      = link_to 'SIGN OUT', destroy_user_session_path, method: :delete
     - else
-      = link_to 'Sign in', new_user_session_path
+      = link_to 'SIGN IN', new_user_session_path

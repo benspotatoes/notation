@@ -1,9 +1,6 @@
 .entry_list
   .entry_list_title
-    = session[:entry_list_title]
-    (
-    = session[:entry_tag]
-    )
+    = "#{session[:entry_list_title]}, #{session[:entry_tag]}"
   .entry_list_header
     - if session[:visible_entries] == 'archived'
       = link_to 'Show active', all_entries_path(session[:entry_tag])

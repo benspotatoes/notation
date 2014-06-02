@@ -37,9 +37,10 @@ class EntriesController < ApplicationController
       @entry = ReadEntry.new(entry_params)
     else
       @entry = Entry.new(entry_params)
+      @entry.entry_type = Entry::ENTRY_TAG_TYPES[session[:entry_tag]]
     end
+    @entry.user_id = current_user.id
 
-    @entry.user = current_user
     if @entry.save
       flash[:success] = 'Entry successfully saved.'
 
@@ -86,9 +87,18 @@ class EntriesController < ApplicationController
     @entry.tags = entry_params[:tags]
 
     if @entry.save
+      if url = entry_params[:url]
+        @entry.read_entry.update_attribute(:url, url)
+      end
       flash[:success] = 'Entry successfully updated.'
     else
-      flash[:error] = 'Error updating entry.'
+      error_msg = "Error updating entry."
+      @entry.errors.messages.each do |what, failed|
+        error_msg += "<br/>"
+        error_msg += "#{what}: #{failed.join(", ")}"
+      end
+      error_msg += "."
+      flash[:error] = error_msg
     end
 
     redirect_to show_entry_path(@entry.public_id)

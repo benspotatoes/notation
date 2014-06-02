@@ -1,7 +1,7 @@
 .entry
   - if @display_entry.read_later?
     .content
-      = @display_entry.url
+      = @display_entry.read_entry.url
   - else
     .content.markdown
       = @display_entry.markdown_preview

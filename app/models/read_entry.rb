@@ -1,33 +1,38 @@
 class ReadEntry < ActiveRecord::Base
   attr_accessor :user_id, :body, :tags, :title
 
-  belongs_to :entry, foreign_key: :entry_primary_id, dependent: :destroy
+  belongs_to :entry, foreign_key: :entry_primary_id
 
-  before_save :set_details
+  before_save :set_url_details
+  before_create :set_entry_details
 
-  def set_details
+  def set_url_details
     page = AGENT.get(url)
-    unless title
+
+    if entry.nil?
       self.title = page.title
+    else
+      entry.update_attribute(:title, page.title)
     end
     self.host = page.uri.host
-
-    entry = create_entry
-    self.entry_primary_id = entry.id
   end
 
-  def create_entry
-    e = Entry.new(user_id: user_id, title: title, entry_type: 3)
+  def set_entry_details
+    entry = Entry.new(user_id: user_id, title: title, entry_type: 3)
 
     if body
-      e.body = body
+      entry.body = body
     end
 
     if tags
-      e.tags = tags
+      entry.tags = tags
     end
 
-    e.save!
-    e
+    entry.save!
+    self.entry_primary_id = entry.id
+  end
+
+  def public_id
+    entry.public_id
   end
 end

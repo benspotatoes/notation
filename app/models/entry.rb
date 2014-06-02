@@ -6,15 +6,15 @@ class Entry < ActiveRecord::Base
 
   before_save :verify_tags
   before_save :set_entry_id
-  before_save :set_entry_type
+  # before_save :set_entry_type
   before_save :sanitize_tags
   before_save :set_title
   before_save :encrypt_data
 
   ENTRY_ID_LENGTH = 5
   TRUNCATED_BODY_LENGTH = 100
-  TRUNCATED_LIST_TITLE_LENGTH = 10
-  TRUNCATED_DISP_TITLE_LENGTH = 25
+  TRUNCATED_LIST_TITLE_LENGTH = 20
+  TRUNCATED_DISP_TITLE_LENGTH = 35
 
   NOTE_TITLE_TEMPLATE = 'Note # '
   TODO_TITLE_TEMPLATE = 'Todo # '
@@ -43,8 +43,6 @@ class Entry < ActiveRecord::Base
     end
 
   def set_entry_type
-    return true if @skip_set_entry_type
-
     if tags_changed? || default?
       if !tags.empty?
         Entry.entry_types.each do |type, int|
@@ -61,10 +59,13 @@ class Entry < ActiveRecord::Base
   end
 
   def verify_tags
+    if !entry_type
+      set_entry_type
+    end
+
     target = entry_type
 
     unless tag_match?(target, true)
-      @skip_set_entry_type = true
       if tags.empty?
         self.tags = target
       else
