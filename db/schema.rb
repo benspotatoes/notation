@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601232618) do
+ActiveRecord::Schema.define(version: 20140602001920) do
 
   create_table "deleted_users", force: true do |t|
     t.integer  "primary_id",  null: false
@@ -31,11 +31,18 @@ ActiveRecord::Schema.define(version: 20140601232618) do
     t.string   "title"
     t.string   "entry_id",                   null: false
     t.integer  "entry_type", default: 0
-    t.string   "url"
   end
 
   add_index "entries", ["user_id", "entry_id"], name: "index_entries_on_user_id_and_entry_id", unique: true
   add_index "entries", ["user_id"], name: "index_entries_on_user_id"
+
+  create_table "read_entries", force: true do |t|
+    t.integer "entry_primary_id", null: false
+    t.string  "url",              null: false
+    t.string  "host",             null: false
+  end
+
+  add_index "read_entries", ["entry_primary_id"], name: "index_read_entries_on_entry_primary_id", unique: true
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

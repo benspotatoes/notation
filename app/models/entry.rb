@@ -2,18 +2,23 @@ class Entry < ActiveRecord::Base
   enum entry_type: [ :default, :note, :todo, :read_later ]
 
   belongs_to :user
+  has_one :read_entry, foreign_key: :entry_primary_id, dependent: :destroy
 
-  before_save :set_title
+  before_save :verify_tags
   before_save :set_entry_id
-  before_save :sanitize_tags
   before_save :set_entry_type
+  before_save :sanitize_tags
+  before_save :set_title
   before_save :encrypt_data
 
   ENTRY_ID_LENGTH = 5
   TRUNCATED_BODY_LENGTH = 100
   TRUNCATED_LIST_TITLE_LENGTH = 10
   TRUNCATED_DISP_TITLE_LENGTH = 25
-  ENTRY_TITLE_TEMPLATE = 'Note # '
+
+  NOTE_TITLE_TEMPLATE = 'Note # '
+  TODO_TITLE_TEMPLATE = 'Todo # '
+  READ_TITLE_TEMPLATE = 'Read # '
 
   NOTE_ENTRY_TAG = 'now'
   TODO_ENTRY_TAG = 'then'
@@ -38,6 +43,8 @@ class Entry < ActiveRecord::Base
     end
 
   def set_entry_type
+    return true if @skip_set_entry_type
+
     if tags_changed? || default?
       if !tags.empty?
         Entry.entry_types.each do |type, int|
@@ -49,6 +56,23 @@ class Entry < ActiveRecord::Base
       end
       self.entry_type = ENTRY_TAG_TYPES[NOTE_ENTRY_TAG]
     end
+
+    true
+  end
+
+  def verify_tags
+    target = entry_type
+
+    unless tag_match?(target, true)
+      @skip_set_entry_type = true
+      if tags.empty?
+        self.tags = target
+      else
+        self.tags = [tags, "#{target}"].join(', ')
+      end
+    end
+
+    true
   end
 
   def decrypted_title
@@ -70,6 +94,8 @@ class Entry < ActiveRecord::Base
     self.title = CRYPT.encrypt_and_sign(title) if title_changed? || override
     self.body = CRYPT.encrypt_and_sign(body) if body_changed? || override
     self.tags = CRYPT.encrypt_and_sign(tags) if tags_changed? || override
+
+    true
   end
 
   def set_entry_id
@@ -81,6 +107,8 @@ class Entry < ActiveRecord::Base
       end
       self.entry_id = random_id
     end
+
+    true
   end
 
   def generate_entry_id
@@ -123,7 +151,19 @@ class Entry < ActiveRecord::Base
   def set_title
     if title.nil? || title.empty?
       num_user_entries = Entry.where(user_id: user_id).count
-      self.title = ENTRY_TITLE_TEMPLATE + "#{num_user_entries + 1}"
+      self.title = entry_title_template + "#{num_user_entries + 1}"
+    end
+
+    true
+  end
+
+  def entry_title_template
+    if note?
+      NOTE_TITLE_TEMPLATE
+    elsif todo?
+      TODO_TITLE_TEMPLATE
+    elsif read_later?
+      READ_TITLE_TEMPLATE
     end
   end
 
@@ -153,6 +193,8 @@ class Entry < ActiveRecord::Base
     if tags
       self.tags = tags.split(',').map(&:strip).join(', ')
     end
+
+    true
   end
 
   def each_tag(callback = false)

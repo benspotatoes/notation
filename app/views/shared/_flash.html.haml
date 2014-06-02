@@ -1,4 +1,4 @@
 .flash
   - flash.each do |type, message|
     .flash-message{ class: "flash-#{type}" }
-      = message
+      = message.html_safe

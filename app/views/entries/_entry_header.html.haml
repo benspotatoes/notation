@@ -3,9 +3,6 @@
     .entry_title
       = @display_entry.disp_title
     \::
-  - else
-    .entry_title
-      New entry
   .entry_actions
     - if @display_entry
       = link_to 'New', all_entries_path(session[:entry_tag]), class: 'action'

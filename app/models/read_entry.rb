@@ -1,15 +1,33 @@
-class ReadEntry < Entry
-  before_save :verify_tags
+class ReadEntry < ActiveRecord::Base
+  attr_accessor :user_id, :body, :tags, :title
 
-  def verify_tags
-    target = ENTRY_TAG_TYPES[READ_ENTRY_TAG]
+  belongs_to :entry, foreign_key: :entry_primary_id, dependent: :destroy
 
-    unless tag_match?(target)
-      if decrypted_tags.empty?
-        update_attribute(:tags, target)
-      else
-        update_attribute(:tags, decrypted_tags + "#{target}")
-      end
+  before_save :set_details
+
+  def set_details
+    page = AGENT.get(url)
+    unless title
+      self.title = page.title
     end
+    self.host = page.uri.host
+
+    entry = create_entry
+    self.entry_primary_id = entry.id
+  end
+
+  def create_entry
+    e = Entry.new(user_id: user_id, title: title, entry_type: 3)
+
+    if body
+      e.body = body
+    end
+
+    if tags
+      e.tags = tags
+    end
+
+    e.save!
+    e
   end
 end

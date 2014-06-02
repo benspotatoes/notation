@@ -1,10 +1,14 @@
 .entry
-  .content.markdown
-    = @display_entry.markdown_preview
-  - if @display_entry.has_tags?
-    .metadata
-      Tags:
-      - @display_entry.each_tag do |tag, idx|
-        = link_to tag, entries_by_tag_path(session[:entry_tag], tag)
-        - unless idx == @display_entry.tag_count - 1
-          = ", "
+  - if @display_entry.read_later?
+    .content
+      = @display_entry.url
+  - else
+    .content.markdown
+      = @display_entry.markdown_preview
+    - if @display_entry.has_tags?
+      .metadata
+        Tags:
+        - @display_entry.each_tag do |tag, idx|
+          = link_to tag, entries_by_tag_path(session[:entry_tag], tag)
+          - unless idx == @display_entry.tag_count - 1
+            = ", "

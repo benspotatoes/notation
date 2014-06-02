@@ -10,13 +10,8 @@ class ApiController < ApplicationController
     set_entry_params
 
     case @entry_type
-    when 'read_it_later'
-      page = AGENT.get(@entry_params[:url])
-      entry = ReadEntry.new(user_id: @entry_params[:user_id],
-                        title: page.title,
-                        tags: @entry_params[:tags],
-                        url: @entry_params[:url],
-                        body: @entry_params[:notes])
+    when Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG]
+      entry = ReadEntry.new(@entry_params)
       head :created if entry.save!
     end
   end
@@ -25,7 +20,7 @@ class ApiController < ApplicationController
     permit_remove_params
 
     case @entry_type
-    when 'read_it_later'
+    when Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG]
       entry = Entry.find_by(user_id: params[:user_id], entry_id: params[:entry_id])
       if entry
         case params[:remove_action]
@@ -79,12 +74,12 @@ class ApiController < ApplicationController
 
     def set_entry_params
       case @entry_type
-      when 'read_it_later'
+      when Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG]
         @entry_params = {
           user_id: params[:user_id],
           url: params[:url],
           tags: params[:tags] || '',
-          notes: params[:notes] || ''
+          body: params[:notes] || ''
         }
       end
     end

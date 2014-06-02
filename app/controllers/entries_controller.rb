@@ -51,7 +51,13 @@ class EntriesController < ApplicationController
 
       redirect_to show_entry_path(@entry.public_id)
     else
-      flash[:error] = 'Error saving entry.'
+      error_msg = "Error saving entry."
+      @entry.errors.messages.each do |what, failed|
+        error_msg += "<br/>"
+        error_msg += "#{what}: #{failed.join(", ")}"
+      end
+      error_msg += "."
+      flash[:error] = error_msg
       redirect_to all_entries_path(session[:entry_tag])
     end
   end
@@ -138,7 +144,15 @@ class EntriesController < ApplicationController
     end
 
     def entry_params
-      params.require(:entry).permit(:title, :body, :tags)
+      default_params = [:title, :body, :tags]
+      allowed_params = []
+
+      case session[:entry_tag]
+      when Entry::READ_ENTRY_TAG
+        allowed_params << :url
+      end
+
+      params.require(:entry).permit(default_params + allowed_params)
     end
 
     def filter_entries_by_tag
