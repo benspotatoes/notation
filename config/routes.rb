@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     get '/:entry_tag', action: 'index', as: 'all_entries'
     get ':entry_tag/archived', action: 'archived_entries', as: 'archived_entries'
     get ':entry_tag/by_tag/:tag', action: 'by_tag', as: 'entries_by_tag'
+    post ':query', action: 'search', as: 'search_entries'
   end
 
   scope 'entry', controller: 'entries' do
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
 
   # API business
   scope 'v1', controller: 'api' do
+    post 'search', action: 'search', as: 'v1_search'
     post 'add', action: 'add_entry', as: 'v1_add_entry'
     post 'remove', action: 'remove_entry', as: 'v1_remove_entry'
   end
