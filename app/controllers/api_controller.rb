@@ -5,6 +5,25 @@ class ApiController < ApplicationController
 
   rescue_from Exception, :with => :error_response
 
+  def search
+    permit_search_params
+
+    @entries = Entry.where(user_id: params[:user_id], entry_type: Entry.entry_types[@entry_type])
+    result = @entries.collect do |entry|
+      data = {
+        user_id: entry.user_id,
+        entry_id: entry.public_id,
+        title: entry.decrypted_title,
+        body: entry.decrypted_body,
+        tags: entry.decrypted_tags,
+      }
+      data[:url] = entry.read_entry.url if entry.read_entry
+      data
+    end
+    render status: :ok,
+           json: { entries: result }
+  end
+
   def add_entry
     permit_add_params
     set_entry_params
@@ -61,6 +80,12 @@ class ApiController < ApplicationController
       params.require(:entry_id)
       params.require(:entry_type)
       params.require(:remove_action)
+    end
+
+    def permit_search_params
+      params.require(:user_id)
+      params.require(:entry_type)
+      params.permit([:limit, :offset])
     end
 
     def set_entry_type
