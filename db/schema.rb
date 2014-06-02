@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20140602025408) do
     t.integer  "user_id",                                null: false
     t.text     "body",                   default: ""
     t.boolean  "archived",               default: false
-    t.text     "tags",       limit: 255, default: ""
+    t.text     "tags",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title"
