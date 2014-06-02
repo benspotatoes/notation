@@ -45,7 +45,7 @@ class Entry < ActiveRecord::Base
     if tags_changed? || default?
       if !tags.empty?
         Entry.entry_types.each do |type, int|
-          if tag_match?(type, true)
+          if tag_match?(type, !new_record? && !tags_changed?)
             self.entry_type = type
             return
           end
@@ -64,7 +64,7 @@ class Entry < ActiveRecord::Base
 
     target = entry_type
 
-    unless tag_match?(target, !new_record?)
+    unless tag_match?(target, !new_record? && !tags_changed?)
       if tags.empty?
         self.tags = target
       else
