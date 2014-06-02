@@ -4,9 +4,8 @@ class Entry < ActiveRecord::Base
   belongs_to :user
   has_one :read_entry, foreign_key: :entry_primary_id, dependent: :destroy
 
-  before_save :verify_tags
   before_save :set_entry_id
-  # before_save :set_entry_type
+  before_save :verify_tags
   before_save :sanitize_tags
   before_save :set_title
   before_save :encrypt_data
@@ -59,13 +58,13 @@ class Entry < ActiveRecord::Base
   end
 
   def verify_tags
-    if !entry_type
+    if default?
       set_entry_type
     end
 
     target = entry_type
 
-    unless tag_match?(target, true)
+    unless tag_match?(target, !new_record?)
       if tags.empty?
         self.tags = target
       else
@@ -83,7 +82,7 @@ class Entry < ActiveRecord::Base
 
   def decrypted_body
     # Body does not always exist, can be nil
-    body.empty? ? '' : CRYPT.decrypt_and_verify(body).to_s
+    body.try(:empty?) ? '' : CRYPT.decrypt_and_verify(body).to_s
   end
 
   def decrypted_tags
@@ -93,7 +92,7 @@ class Entry < ActiveRecord::Base
 
   def encrypt_data(override = false)
     self.title = CRYPT.encrypt_and_sign(title) if title_changed? || override
-    self.body = CRYPT.encrypt_and_sign(body) if body_changed? || override
+    self.body = CRYPT.encrypt_and_sign(body || '') if body_changed? || override
     self.tags = CRYPT.encrypt_and_sign(tags) if tags_changed? || override
 
     true
@@ -198,11 +197,10 @@ class Entry < ActiveRecord::Base
     true
   end
 
-  def each_tag(callback = false)
+  def each_tag(check_decrypted = true)
     return decrypted_tags unless block_given?
 
-    if callback
-      # For a callback, tags have not been encrypted yet
+    if !check_decrypted
       tags.split(', ').each_with_index do |tag, index|
         yield tag.strip, index
       end
@@ -217,8 +215,8 @@ class Entry < ActiveRecord::Base
     decrypted_tags.split(', ').count
   end
 
-  def tag_match?(target = '', callback = false)
-    each_tag(callback) do |tag|
+  def tag_match?(target = '', check_decrypted = true)
+    each_tag(check_decrypted) do |tag|
       if tag.downcase == target
         return true
       end
