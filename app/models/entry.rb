@@ -81,19 +81,19 @@ class Entry < ActiveRecord::Base
   end
 
   def decrypted_body
-    # Body does not always exist, can be nil
+    # Body can be nil
     body.try(:empty?) ? '' : CRYPT.decrypt_and_verify(body).to_s
   end
 
   def decrypted_tags
-    # Tags default to an empty string
-    tags.empty? ? '' : CRYPT.decrypt_and_verify(tags).to_s
+    # Tags can be nil
+    tags.try(:empty?) ? '' : CRYPT.decrypt_and_verify(tags).to_s
   end
 
   def encrypt_data(override = false)
     self.title = CRYPT.encrypt_and_sign(title) if title_changed? || override
     self.body = CRYPT.encrypt_and_sign(body || '') if body_changed? || override
-    self.tags = CRYPT.encrypt_and_sign(tags) if tags_changed? || override
+    self.tags = CRYPT.encrypt_and_sign(tags || '') if tags_changed? || override
 
     true
   end
