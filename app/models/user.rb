@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   before_save :set_user_id
 
-  validates :username, uniqueness: { case_insensitive: false }
+  validates :username, uniqueness: { case_insensitive: false }, presence: true
 
   attr_accessor :login
 
