@@ -10,6 +10,8 @@ class Entry < ActiveRecord::Base
   before_save :set_title
   before_save :encrypt_data
 
+  validate :entry_type_present?
+
   ENTRY_ID_LENGTH = 5
   TRUNCATED_BODY_LENGTH = 100
   TRUNCATED_LIST_TITLE_LENGTH = 20
@@ -41,6 +43,15 @@ class Entry < ActiveRecord::Base
           'X'*32))
     end
 
+  def entry_type_present?
+    if default?
+      errors.add(:entry_type, 'must be set.')
+      return false
+    end
+
+    true
+  end
+
   def set_entry_type
     if tags_changed? || default?
       if !tags.empty?
@@ -65,7 +76,7 @@ class Entry < ActiveRecord::Base
     target = entry_type
 
     unless tag_match?(target, !new_record? && !tags_changed?)
-      if tags.empty?
+      if tags.try(:empty?)
         self.tags = target
       else
         self.tags = [tags, "#{target}"].join(', ')
@@ -198,13 +209,14 @@ class Entry < ActiveRecord::Base
   end
 
   def each_tag(check_decrypted = true)
-    return decrypted_tags unless block_given?
-
     if !check_decrypted
+      return tags unless block_given? && tags.present?
       tags.split(', ').each_with_index do |tag, index|
         yield tag.strip, index
       end
     else
+      return decrypted_tags unless block_given?
+
       decrypted_tags.split(', ').each_with_index do |tag, index|
         yield tag.strip, index
       end
