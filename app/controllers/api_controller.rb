@@ -2,23 +2,19 @@ class ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   before_action :set_entry_type
+  before_action :set_user
 
   rescue_from Exception, :with => :error_response
 
   def search
     permit_search_params
 
-    @entries = Entry.where(user_id: params[:user_id], entry_type: Entry.entry_types[@entry_type])
+    @entries = Entry.where(user_id: @user.id, entry_type: Entry.entry_types[@entry_type])
+    @entries = @entries.offset(params[:offset].to_i) if params[:offset]
+    @entries = @entries.limit(params[:limit] || 30)
+
     result = @entries.collect do |entry|
-      data = {
-        user_id: entry.user_id,
-        entry_id: entry.public_id,
-        title: entry.decrypted_title,
-        body: entry.decrypted_body,
-        tags: entry.decrypted_tags,
-      }
-      data[:url] = entry.read_entry.url if entry.read_entry
-      data
+      collect_entry_data(entry)
     end
     render status: :ok,
            json: { entries: result }
@@ -40,7 +36,7 @@ class ApiController < ApplicationController
 
     case @entry_type
     when Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG]
-      entry = Entry.find_by(user_id: params[:user_id], entry_id: params[:entry_id])
+      entry = Entry.find_by(user_id: @user.id, entry_id: params[:entry_id])
       if entry
         case params[:remove_action]
         when 'archive'
@@ -97,15 +93,37 @@ class ApiController < ApplicationController
       end
     end
 
+    def set_user
+      @user_id = params[:user_id]
+      unless @user = User.find_by(user_id: @user_id)
+        render status: :not_found,
+               json: {error: 'User not found.'}
+        return
+      end
+    end
+
     def set_entry_params
       case @entry_type
       when Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG]
         @entry_params = {
-          user_id: params[:user_id],
+          user_id: @user.id,
           url: params[:url],
           tags: params[:tags] || '',
           body: params[:notes] || ''
         }
       end
+    end
+
+    def collect_entry_data(entry)
+      data = {
+        user_id: entry.user_id,
+        entry_id: entry.public_id,
+        title: entry.decrypted_title,
+        body: entry.decrypted_body,
+        tags: entry.decrypted_tags,
+      }
+      data[:url] = entry.read_entry.url if entry.read_entry
+
+      return data
     end
 end
