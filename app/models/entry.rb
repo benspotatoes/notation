@@ -76,7 +76,7 @@ class Entry < ActiveRecord::Base
     target = entry_type
 
     unless tag_match?(target, !new_record? && !tags_changed?)
-      if tags.try(:empty?)
+      if tags.nil? || tags.empty?
         self.tags = target
       else
         self.tags = [tags, "#{target}"].join(', ')
