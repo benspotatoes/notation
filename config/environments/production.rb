@@ -83,4 +83,7 @@ Rails.application.configure do
 
   # Devise config
   config.action_mailer.default_url_options = { host: 'notation.benspotatoes.com' }
+
+  # Paperclip config
+  Paperclip.options[:command_path] = '/usr/bin/'
 end

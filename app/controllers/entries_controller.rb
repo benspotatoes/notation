@@ -159,7 +159,7 @@ class EntriesController < ApplicationController
 
       case session[:entry_tag]
       when Entry::READ_ENTRY_TAG
-        allowed_params << :url
+        allowed_params += [:url, :attachment]
       end
 
       params.require(:entry).permit(default_params + allowed_params)

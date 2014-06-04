@@ -32,3 +32,6 @@ config/secrets.yml
 
 # Compiled assets
 public/assets
+
+# Secrets
+app_secrets.rb

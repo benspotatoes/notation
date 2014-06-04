@@ -16,6 +16,8 @@ gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
 gem 'newrelic_rpm' # New Relic reporting
 gem 'mechanize' # Read-it-later entry parsing
+gem 'paperclip', '~> 4.1' # Uploads to read-later
+gem 'aws-sdk', '~> 1.42' # Store attachments in S3
 
 group :production do
   gem 'mysql2', '~> 0.3.15'

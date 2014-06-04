@@ -30,6 +30,7 @@ class Entry < ActiveRecord::Base
     READ_ENTRY_TAG => 'read_later'
   }
 
+  # ENCRYPTOR_SALT = SecureRandom.hex(32)
   CRYPT =
     if Rails.env.production?
       ActiveSupport::MessageEncryptor.new(

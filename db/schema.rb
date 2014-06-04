@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140602025408) do
+ActiveRecord::Schema.define(version: 20140604234631) do
 
   create_table "deleted_users", force: true do |t|
     t.integer  "primary_id",  null: false
@@ -37,9 +37,14 @@ ActiveRecord::Schema.define(version: 20140602025408) do
   add_index "entries", ["user_id"], name: "index_entries_on_user_id"
 
   create_table "read_entries", force: true do |t|
-    t.integer "entry_primary_id", null: false
-    t.string  "url",              null: false
-    t.string  "host",             null: false
+    t.integer  "entry_primary_id",        null: false
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
+    t.string   "url"
+    t.string   "host"
+    t.string   "token"
   end
 
   add_index "read_entries", ["entry_primary_id"], name: "index_read_entries_on_entry_primary_id", unique: true
