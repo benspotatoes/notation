@@ -37,4 +37,8 @@ class User < ActiveRecord::Base
       where(conditions).first
     end
   end
+
+  def max_uploads?
+    upload_count >= 5
+  end
 end
