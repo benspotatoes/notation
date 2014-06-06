@@ -14,7 +14,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'turbolinks'
 gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
-gem 'newrelic_rpm' # New Relic reporting
 gem 'mechanize' # Read-it-later entry parsing
 gem 'paperclip', '~> 4.1' # Uploads to read-later
 gem 'aws-sdk', '~> 1.42' # Store attachments in S3
@@ -22,12 +21,15 @@ gem 'aws-sdk', '~> 1.42' # Store attachments in S3
 group :production do
   gem 'mysql2', '~> 0.3.15'
   gem 'unicorn', '~> 4.8.2'
+  gem 'newrelic_rpm'
 end
 
 group :test, :development do
   gem 'thin'
   gem 'sqlite3'
   gem 'spring'
+  gem 'rspec-rails', '~> 3.0.0'
+  gem 'coveralls', '~> 0.7.0'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
