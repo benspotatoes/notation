@@ -12,6 +12,7 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'turbolinks'
+
 gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
 gem 'mechanize' # Read-it-later entry parsing
@@ -25,11 +26,11 @@ group :production do
 end
 
 group :test, :development do
+  gem 'spring'
   gem 'thin'
   gem 'sqlite3'
-  gem 'spring'
-  gem 'rspec-rails', '~> 3.0.0'
-  gem 'coveralls', '~> 0.7.0'
+  gem 'rspec-rails', '~> 3.0.0', require: false
+  gem 'coveralls', '~> 0.7.0', require: false
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
