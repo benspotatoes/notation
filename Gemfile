@@ -29,8 +29,8 @@ group :test, :development do
   gem 'spring'
   gem 'thin'
   gem 'sqlite3'
-  gem 'rspec-rails', '~> 3.0.0', require: false
-  gem 'coveralls', '~> 0.7.0', require: false
+  gem 'rspec-rails', '~> 3.0.0'
+  gem 'coveralls', '~> 0.7.0'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
