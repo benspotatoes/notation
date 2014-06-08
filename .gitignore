@@ -15,7 +15,7 @@ rerun.txt
 pickle-email-*.html
 
 config/initializers/secret_token.rb
-config/secrets.yml
+# config/secrets.yml # Secrets have already been hidden where necessary
 
 ## Environment normalisation:
 /.bundle
