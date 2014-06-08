@@ -25,7 +25,6 @@ group :production do
 end
 
 group :staging do
-  gem 'thin'
   gem 'pg'
   gem 'rails_12factor'
 end
@@ -36,10 +35,13 @@ end
 
 group :test, :development do
   gem 'spring'
-  gem 'thin'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.0.0'
   gem 'coveralls', '~> 0.7.0'
+end
+
+group :staging, :test, :development do
+  gem 'thin'
 end
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
