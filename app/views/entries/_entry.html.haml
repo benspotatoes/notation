@@ -1,10 +1,6 @@
 .entry
-  - if @display_entry.read_later?
-    .content
-      = @display_entry.read_entry.url
-  - else
-    .content.markdown
-      = @display_entry.markdown_preview
+  .content.markdown
+    = @display_entry.markdown_preview
     - if @display_entry.has_tags?
       .metadata
         Tags:

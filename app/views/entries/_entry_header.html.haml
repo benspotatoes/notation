@@ -1,7 +1,10 @@
 .entry_header
   - if @display_entry
     .entry_title
-      = @display_entry.disp_title
+      - if @display_entry.read_later?
+        = link_to @display_entry.disp_title, @display_entry.read_entry.url || @display_entry.read_entry.attachment_url
+      - else
+        = @display_entry.disp_title
     \::
   .entry_actions
     - if @display_entry
