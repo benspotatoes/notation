@@ -31,11 +31,14 @@ class ReadEntry < ActiveRecord::Base
   def set_url_details
     page = AGENT.get(url)
 
-    if entry.nil?
-      self.title = page.title
-    else
-      entry.update_attribute(:title, page.title)
+    if !title.present?
+      if entry.nil?
+        self.title = page.title
+      else
+        entry.update_attribute(:title, page.title)
+      end
     end
+
     self.host = page.uri.host
   end
 
