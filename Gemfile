@@ -22,6 +22,15 @@ gem 'aws-sdk', '~> 1.42' # Store attachments in S3
 group :production do
   gem 'mysql2', '~> 0.3.15'
   gem 'unicorn', '~> 4.8.2'
+end
+
+group :staging do
+  gem 'thin'
+  gem 'pg'
+  gem 'rails_12factor'
+end
+
+group :staging, :production do
   gem 'newrelic_rpm'
 end
 

@@ -20,6 +20,9 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+staging:
+  <<: *default
+
 production:
   adapter: mysql2
   encoding: utf8
