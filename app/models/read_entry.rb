@@ -20,10 +20,10 @@ class ReadEntry < ActiveRecord::Base
   end
 
   def check_for_minimum_requirements
-    if !url.empty?
+    if !url.try(:empty?) && url_changed?
       self.attachment = nil
       set_url_details
-    elsif attachment.file?
+    elsif attachment.try(:file?) && attachment_file_name_changed?
       self.url = nil
     end
   end

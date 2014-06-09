@@ -6,6 +6,7 @@ class EntriesController < ApplicationController
   def index
     @entry_form_path = create_entry_path
     @entry_form_request = :post
+    @new_read_entry = true
 
     session[:entry_list_title] = 'Active entries'
     session.delete(:visible_entries)
