@@ -13,6 +13,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'turbolinks'
 
+gem 'newrelic_rpm'
 gem 'redcarpet' # Markdown processing
 gem 'devise' # User authentication
 gem 'mechanize' # Read-it-later entry parsing
@@ -27,10 +28,6 @@ end
 group :staging do
   gem 'pg'
   gem 'rails_12factor'
-end
-
-group :staging, :production do
-  gem 'newrelic_rpm'
 end
 
 group :test, :development do
