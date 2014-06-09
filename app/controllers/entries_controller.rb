@@ -82,14 +82,12 @@ class EntriesController < ApplicationController
   def update
     load_all_entries
 
-    @entry.title = entry_params[:title]
-    @entry.body = entry_params[:body]
-    @entry.tags = entry_params[:tags]
+    case session[:entry_tag]
+    when Entry::READ_ENTRY_TAG
+      @entry = @entry.read_entry
+    end
 
-    if @entry.save
-      if url = entry_params[:url]
-        @entry.read_entry.update_attribute(:url, url)
-      end
+    if @entry.update_attributes(entry_params)
       flash[:success] = 'Entry successfully updated.'
     else
       error_msg = "Error updating entry."

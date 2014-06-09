@@ -10,7 +10,7 @@ class ReadEntry < ActiveRecord::Base
                     path: '/:class/:attachment/:token-:filename'
 
   before_save :check_for_minimum_requirements
-  before_create :set_entry_details
+  before_save :set_entry_details
   before_create :generate_paperclip_token
 
   validates_attachment_content_type :attachment, content_type: ['application/pdf']
@@ -43,18 +43,14 @@ class ReadEntry < ActiveRecord::Base
   end
 
   def set_entry_details
-    entry = Entry.new(user_id: user_id, title: title, entry_type: 3)
-
-    if body
-      entry.body = body
+    if !self.entry
+      new_entry = Entry.new(user_id: user_id, entry_type: Entry::ENTRY_TAG_TYPES[Entry::READ_ENTRY_TAG])
+      new_entry.attributes = { title: title, body: body, tags: tags }
+      new_entry.save!
+      self.entry_primary_id = new_entry.id
+    else
+      entry.update_attributes({ title: title, body: body, tags: tags })
     end
-
-    if tags
-      entry.tags = tags
-    end
-
-    entry.save!
-    self.entry_primary_id = entry.id
   end
 
   def public_id
