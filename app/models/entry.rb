@@ -212,7 +212,7 @@ class Entry < ActiveRecord::Base
   def each_tag(check_decrypted = true)
     if !check_decrypted
       return tags unless block_given? && tags.present?
-      tags.split(', ').each_with_index do |tag, index|
+      tags.split(',').each_with_index do |tag, index|
         yield tag.strip, index
       end
     else
