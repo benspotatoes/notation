@@ -70,19 +70,7 @@ class Entry < ActiveRecord::Base
   end
 
   def verify_tags
-    if default?
-      set_entry_type
-    end
-
-    target = entry_type
-
-    unless tag_match?(target, !new_record? && !tags_changed?)
-      if tags.nil? || tags.empty?
-        self.tags = target
-      else
-        self.tags = [tags, "#{target}"].join(', ')
-      end
-    end
+    set_entry_type if default?
 
     true
   end
@@ -131,13 +119,13 @@ class Entry < ActiveRecord::Base
     entry_id
   end
 
-  def markdown_preview(with_checkboxes = nil)
+  def to_markdown(with_checkboxes = nil)
     if with_checkboxes
       # Explicitly render with checkboxes
       RENDERER.render_with_checkboxes(decrypted_body).html_safe
     elsif with_checkboxes.nil?
-      # Render with checkbox only if tags include 'todo'
-      if tag_match?('todo')
+      # Render with checkbox only if entry_type is 'todo'
+      if todo_entry?
         RENDERER.render_with_checkboxes(decrypted_body).html_safe
       else
         RENDERER.render(decrypted_body).html_safe
@@ -240,6 +228,18 @@ class Entry < ActiveRecord::Base
 
   def has_tags?
     decrypted_tags.length > 0
+  end
+
+  def note_entry?
+    entry_type == ENTRY_TAG_TYPES[NOTE_ENTRY_TAG]
+  end
+
+  def todo_entry?
+    entry_type == ENTRY_TAG_TYPES[TODO_ENTRY_TAG]
+  end
+
+  def read_entry?
+    entry_type == ENTRY_TAG_TYPES[READ_ENTRY_TAG]
   end
 end
 

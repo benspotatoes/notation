@@ -1,6 +1,6 @@
 .entry
   .content.markdown
-    = @display_entry.markdown_preview(true)
+    = @display_entry.to_markdown(true)
     - if @display_entry.has_tags?
       .metadata
         Tags:
