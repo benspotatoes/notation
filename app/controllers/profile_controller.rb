@@ -21,32 +21,41 @@ class ProfileController < ApplicationController
     @successfully_updated = []
 
     if @user.respond_to?(:username) &&
-        new_username = params[:profile][:username] &&
-        @user.username != new_username
-      unless try_update_attr(:username, {username: new_username})
+        (!params[:profile][:username].empty? && !@user.username.nil?) &&
+        (new_username = params[:profile][:username]) &&
+        (@user.username != new_username)
+      if try_update_attr(:username, {username: new_username})
+        @successfully_updated << :username
+      else
         redirect_to edit_profile_path(@user.user_id)
         return
       end
     end
 
-    if new_email = params[:profile][:email] &&
-        @user.email != new_email
-      unless try_update_attr(:email, {email: new_email})
+    if !params[:profile][:email].empty? &&
+        (new_email = params[:profile][:email]) &&
+        (@user.email != new_email)
+      if try_update_attr(:email, {email: new_email})
+        @successfully_updated << :email
+      else
         redirect_to edit_profile_path(@user.user_id)
         return
       end
     end
 
-    if new_password = params[:profile][:password] &&
-        new_password_confirmation = params[:profile][:password_confirmation]
+    if !params[:profile][:password].empty? &&
+        (new_password = params[:profile][:password]) &&
+        (new_password_confirmation = params[:profile][:password_confirmation])
       password_params = {password: new_password, password_confirmation: new_password_confirmation}
-      unless try_update_attr(:password, password_params)
+      if try_update_attr(:password, password_params)
+        @successfully_updated << :password
+      else
         redirect_to edit_profile_path(@user.user_id)
         return
       end
     end
 
-    flash[:success] = "#{@successfully_updated.join(', ')} successfully updated."
+    flash[:success] = "#{@successfully_updated.map(&:to_s).join(', ').capitalize} successfully updated."
     redirect_to show_profile_path(@user.user_id)
   end
 

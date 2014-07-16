@@ -2,7 +2,7 @@
   - if current_user.respond_to?(:username)
     .profile_form_section
       .form_field
-        = text_field_tag 'profile[username]', current_user.username || nil, placeholder: 'Username', size: 25
+        = text_field_tag 'profile[username]', current_user.username, placeholder: 'Username', size: 25
   .profile_form_section
     .form_field
       = text_field_tag 'profile[email]', current_user.email, placeholder: 'Email', size: 25
