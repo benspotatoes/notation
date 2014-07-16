@@ -21,7 +21,7 @@ class ProfileController < ApplicationController
     @successfully_updated = []
 
     if @user.respond_to?(:username) &&
-        (!params[:profile][:username].empty? && !@user.username.nil?) &&
+        !params[:profile][:username].empty? &&
         (new_username = params[:profile][:username]) &&
         (@user.username != new_username)
       if try_update_attr(:username, {username: new_username})
