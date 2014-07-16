@@ -43,18 +43,6 @@ class ProfileController < ApplicationController
       end
     end
 
-    if !params[:profile][:password].empty? &&
-        (new_password = params[:profile][:password]) &&
-        (new_password_confirmation = params[:profile][:password_confirmation])
-      password_params = {password: new_password, password_confirmation: new_password_confirmation}
-      if try_update_attr(:password, password_params)
-        @successfully_updated << :password
-      else
-        redirect_to edit_profile_path(@user.user_id)
-        return
-      end
-    end
-
     flash[:success] = "#{@successfully_updated.map(&:to_s).join(', ').capitalize} successfully updated."
     redirect_to show_profile_path(@user.user_id)
   end

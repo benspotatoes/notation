@@ -8,12 +8,6 @@
       = text_field_tag 'profile[email]', current_user.email, placeholder: 'Email', size: 25
   .profile_form_section
     .form_field
-      = password_field_tag 'profile[password]', nil, placeholder: 'Password', size: 25
-  .profile_form_section
-    .form_field
-      = password_field_tag 'profile[password_confirmation]', nil, placeholder: 'Password', size: 25
-  .profile_form_section
-    .form_field
       = password_field_tag 'profile[current_password]', nil, placeholder: 'Current password', size: 25
   = submit_tag 'Save', class: 'submit'
 
