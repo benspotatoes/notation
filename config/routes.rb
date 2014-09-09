@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'pages#root'
 
+  get 'ping', controller: 'pages', action: 'ping', as: 'ping'
+
   scope 'profile', controller: 'profile' do
     get ':id', action: 'show', as: 'show_profile'
     get ':id/edit', action: 'edit', as: 'edit_profile'
